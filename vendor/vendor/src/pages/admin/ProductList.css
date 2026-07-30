@@ -1,0 +1,458 @@
+
+
+.price-container {
+ 
+  font-family: "Inter", sans-serif;
+}
+
+/* HEADER */
+.header-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header-section h1 {
+  font-size: 21px;
+  font-weight: 700;
+  text-align: left;
+  color: #dc3545;
+}
+
+
+
+/* TABLE CARD */
+.table-card {
+
+  
+  border-radius: 14px;
+  
+}
+
+/* TABLE WRAPPER */
+.table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px; /* forces scroll on mobile */
+}
+
+/* DESKTOP TABLE */
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+
+  color: #13385a;
+  font-weight: 600;
+}
+
+td img {
+  width: 55px;
+  height: 55px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #d7dfe9;
+}
+
+/* PAGINATION */
+.pagination {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.pagination button {
+  background: #13385a;
+
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.active-page {
+  background: #ffc107 !important;
+  color: black !important;
+}
+
+/* ───────────────────────── MOBILE VIEW ───────────────────────── */
+@media (max-width: 768px) {
+
+  .table-card {
+
+  }
+
+  table {
+    min-width: 600px !important;
+    display: table !important;
+  }
+
+  th,
+  td {
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  td img {
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+  }
+
+  .filter-bar input,
+  .filter-bar select {
+    width: 100%;
+  }
+
+  .mobile-list {
+    display: none !important; /* FORCE REMOVE CARDS */
+  }
+}
+/* ---------- SUPER COMPACT MOBILE TABLE ---------- */
+@media (max-width: 768px) {
+
+  /* row height */
+  th, td {
+    padding: 4px 2px !important;
+    font-size: 10px !important;
+  }
+
+  /* image very small */
+  td img {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 4px !important;
+  }
+
+  /* reduce table width requirement */
+  table {
+    min-width: 480px !important;
+  }
+
+  /* individual column compactness */
+  th:nth-child(1), td:nth-child(1) { width: 30px !important; }  /* Sr */
+  th:nth-child(2), td:nth-child(2) { width: 40px !important; }  /* Image */
+  th:nth-child(3), td:nth-child(3) { width: 110px !important; } /* Name */
+  th:nth-child(4), td:nth-child(4) { width: 50px !important; }  /* Base */
+  th:nth-child(5), td:nth-child(5) { width: 40px !important; }  /* Diff */
+  th:nth-child(6), td:nth-child(6) { width: 50px !important; }  /* Final */
+
+  /* Name left align */
+  td:nth-child(3) {
+    text-align: left !important;
+    font-weight: 600;
+  }
+
+  /* Remove card spacing */
+  .table-card {
+    
+  }
+}
+/* ---------- UNIFORM GAP FOR ALL COLUMNS (MOBILE) ---------- */
+@media (max-width: 768px) {
+
+  .table-card {
+    
+  }
+
+  table {
+    min-width: 520px !important; /* balanced compact width */
+  }
+
+  /* Compact global row spacing */
+  th, td {
+    padding: 4px 3px !important;
+    font-size: 10px !important;
+    text-align: left !important;
+  }
+
+  /* IMAGE SMALL */
+  td img {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 4px !important;
+  }
+
+  /* --- SAME GAP FOR ALL COLUMNS --- */
+  th:nth-child(1), td:nth-child(1) { width: 15px !important; }  /* Sr */
+  th:nth-child(2), td:nth-child(2) { width: 28px !important; }  /* Img */
+  th:nth-child(3), td:nth-child(3) { width: 40px !important; } /* Name */
+  th:nth-child(4), td:nth-child(4) { width: 35px !important; }  /* Base */
+  th:nth-child(5), td:nth-child(5) { width: 30px !important; }  /* Diff */
+  th:nth-child(6), td:nth-child(6) { width: 30px !important; }  /* Final */
+
+  /* Name left-align clean */
+  td:nth-child(3) {
+    font-weight: 600 !important;
+  }
+}
+/* ===== REMOVE ALL LEFT/RIGHT PADDING GLOBALLY ===== */
+.table-card,
+.table-scroll,
+.price-container,
+header-section,
+table {
+  padding-left: 20 !important;
+  padding-right: 20 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* ===== TABLE FULL WIDTH EDGE TO EDGE ===== */
+.table-scroll {
+  width: 100% !important;
+  overflow-x: auto;
+}
+
+table {
+  width: 100% !important;
+  border-collapse: collapse;
+  margin: 0 !important;
+}
+
+/* th/td no extra padding sides */
+th, td {
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+/* ----- MOBILE VIEW FULL WIDTH EDGE TO EDGE ----- */
+@media (max-width: 768px) {
+
+  .price-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .table-card {
+    padding: 0 !important;
+  }
+
+  .table-scroll {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  table {
+    min-width: 500px !important; 
+    margin: 0 !important;
+  }
+
+  th, td {
+    padding: 13px 1px !important; /* super compact */
+    font-size: 10px !important;
+  }
+
+  td img {
+    width: 26px !important;
+    height: 26px !important;
+  }
+}
+/* ===== REMOVE ALL BACKGROUND COLORS (ONLY CONTENT AREA) ===== */
+
+.price-container,
+.table-card,
+.table-scroll,
+table,
+th,
+td {
+
+}
+
+/* remove header gray/blue background */
+th {
+ 
+}
+
+/* remove any row hover background */
+table tr:hover {
+ 
+}
+
+/* remove filter bar bg if any */
+.filter-bar input,
+.filter-bar select {
+ 
+}
+
+/* keep pagination same */
+.pagination button {
+  
+}
+
+/* active page stays highlighted */
+.active-page {
+  background: #ffc107 !important;
+  color: black !important;
+}
+/* FULL WIDTH — NO LEFT/RIGHT GAP ANYWHERE */
+.price-container,
+.table-card,
+.table-scroll,
+table {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* TABLE NO SPACING */
+.table-scroll {
+  overflow-x: auto;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* NO SIDE PADDING IN th/td */
+th, td {
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+/* REMOVE ALL BACKGROUNDS / BORDERS FROM THE CARD */
+.table-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* REMOVE H2 BACKGROUND, BOTTOM BORDER, ANY SHADOW */
+.table-card h2 {
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 6px 0 !important; /* thoda upar-niche clean gap only */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* REMOVE HEADER BACKGROUND ALSO */
+th {
+  background: transparent !important;
+}
+
+/* REMOVE ROW HOVER BG */
+table tr:hover {
+  background: transparent !important;
+}
+
+/* MOBILE STRICT FULL WIDTH */
+@media (max-width: 768px) {
+
+  .price-container {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .table-scroll {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  table {
+    min-width: 500px !important;
+    margin: 0 !important;
+  }
+
+  th, td {
+    padding: 21px 1px !important;
+    font-size: 10px !important;
+  }
+
+  td img {
+    width: 26px !important;
+    height: 26px !important;
+  }
+}
+/* ===== ALWAYS SINGLE LINE FILTERS (Desktop + Mobile) ===== */
+.filter-bar {
+  display: flex;
+  flex-wrap: nowrap !important;      /* never wrap */
+  overflow-x: auto !important;       /* mobile scroll */
+  gap: 10px;
+  padding-bottom: 6px;
+  width: 100%;
+  scrollbar-width: none;
+}
+.filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Input + Select fields */
+.filter-bar input,
+.filter-bar select {
+  flex-shrink: 0 !important;     /* never shrink */
+  width: 150px !important;       /* desktop width */
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  border-radius: 10px;
+}
+
+/* ===== MOBILE – Compact but same row ===== */
+@media (max-width: 768px) {
+
+  .filter-bar input,
+  .filter-bar select {
+    width: 110px !important;      /* fits 3 in a row */
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+}
+
+
+
+/* =============================== */
+/*   FINAL SINGLE-LINE FILTER BAR  */
+/* =============================== */
+.filter-bar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;        /* Never wrap */
+  overflow-x: auto !important;         /* Mobile scroll */
+  gap: 10px;
+  width: 100%;
+  padding-bottom: 6px;
+  scrollbar-width: none;               /* Hide scrollbar */
+}
+.filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* All inputs & selects same size */
+.filter-bar input,
+.filter-bar select {
+  flex-shrink: 0 !important;           /* No shrinking */
+  width: 150px !important;             /* Desktop width */
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  border-radius: 10px !important;
+}
+
+/* ============ MOBILE ============ */
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+  }
+
+  .filter-bar input,
+  .filter-bar select {
+    width: 105px !important;          /* Perfect for 3 filters */
+    font-size: 12px !important;
+    padding: 8px 8px !important;
+  }
+}

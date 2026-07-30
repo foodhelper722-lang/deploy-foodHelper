@@ -1,0 +1,1031 @@
+/* ---------------------------------------------------
+   CONTAINER
+--------------------------------------------------- */
+.category-container {
+
+  margin: 10px auto;
+
+
+
+
+  font-family: "Inter", sans-serif;
+}
+
+/* ---------------------------------------------------
+   HEADER
+--------------------------------------------------- */
+.header {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.header h2 {
+  font-size: 21px;
+  font-weight: 700;
+  color: #dc3545;
+  text-align: left;
+}
+
+.header p {
+  color: #dc3545;
+  margin-top: 5px;
+}
+
+/* ---------------------------------------------------
+   CATEGORY FORM
+--------------------------------------------------- */
+.category-form {
+  
+}
+
+.category-form .form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.category-form input[type="text"],
+.category-form input[type="file"] {
+  flex: 1;
+  min-width: 220px;
+  padding: 12px 14px;
+  /* border: 1px solid #d7dfe9;
+  border-radius: 10px;
+  background: #f8fafc; */
+  transition: 0.3s;
+}
+
+.category-form button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.cancel-btn {
+  background: #dc3545 !important;
+}
+
+/* ---------------------------------------------------
+   GLOBAL BUTTONS
+--------------------------------------------------- */
+button {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+.small-btn {
+  background: #dc3545;
+  color: white;
+  padding: 7px 12px;
+  border-radius: 8px;
+}
+
+/* ---------------------------------------------------
+   DESKTOP TABLE + MOBILE LIST VIEW
+--------------------------------------------------- */
+.category-list {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-list table {
+  width: 100%;
+  
+
+ 
+}
+/* -------- PERFECT INLINE HEADER ROW -------- */
+.header-row-fixed {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 22px auto;   /* gap top + bottom */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+
+  /* clean spacing around */
+  padding: 4px 2px;
+}
+
+/* LEFT — SEARCH */
+.search-input-fixed {
+  flex: 1; 
+  padding: 13px 16px;
+  border: 1px solid #cfd8e3;
+  border-radius: 12px;
+  font-size: 15px;
+  background: #ffffff;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.search-input-fixed:focus {
+  border-color: #d8c1c3;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+}
+
+/* RIGHT — ADD CATEGORY */
+.add-cat-btn-fixed {
+  background: #dc3545;
+  color: white;
+  padding: 13px 22px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.add-cat-btn-fixed:hover {
+  background: #17191c;
+  transform: translateY(-2px);
+}
+
+/* -------- MOBILE: STILL SIDE BY SIDE -------- */
+@media (max-width: 768px) {
+  .header-row-fixed {
+    flex-direction: row;   /* force same line */
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .search-input-fixed {
+    padding: 10px 12px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  .add-cat-btn-fixed {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+}
+
+
+.category-list th,
+.category-list td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e8edf3;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.category-list th {
+  background: #f0f5ff;
+  font-weight: 600;
+  color: #13385a;
+}
+
+.table-img {
+  width: 65px;
+  height: 65px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #d0d7e3;
+}
+
+/* ---------------------------------------------------
+   3 DOTS MENU
+--------------------------------------------------- */
+.dots-wrap {
+  position: relative;
+}
+
+.dots-btn {
+  font-size: 22px;
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.dots-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+
+  border-radius: 10px;
+  padding: 6px;
+  min-width: 140px;
+  
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  animation: menuPop .12s ease;
+   top: auto !important;
+    bottom: 100% !important;  
+}
+
+@keyframes menuPop {
+  from {opacity: 0; transform: translateY(-6px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.menu-item {
+  padding: 10px 12px;
+  text-align: left;
+  background: transparent;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.menu-item:hover {
+  
+}
+
+/* ---------------------------------------------------
+   SUBCATEGORY SECTION
+--------------------------------------------------- */
+/* ---------------------------------------------------
+   SUBCATEGORY SECTION - MODERN & COMPACT
+--------------------------------------------------- */
+
+.sub-section {
+  margin-top: 12px;
+  padding: 15px;
+  background: #f9fbff;
+  border: 1px solid #d8e4f7;
+  border-radius: 14px;
+}
+
+/* Heading */
+.sub-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #20446c;
+}
+
+/* List Grid */
+.sub-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+/* Each sub item card */
+.sub-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e1e6ef;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  transition: 0.2s;
+}
+
+.sub-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+}
+
+/* Left content with image + name */
+.sub-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Thumbnail */
+.sub-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #ccd6e3;
+}
+
+.no-img {
+  background: #e5ecf5;
+  color: #7a8aa0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+/* Name text */
+.sub-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #13385a;
+}
+
+/* Dots Action Menu */
+.small-dots {
+  padding: 4px;
+  font-size: 20px;
+  background: transparent;
+  border: none;
+}
+
+/* ---------------------------------------------------
+   SUBCATEGORY FORM - SMALL + CLEAN
+--------------------------------------------------- */
+/* -----------------------------------------------
+   SUB FORM – CLEAN & RESPONSIVE
+----------------------------------------------- */
+.sub-form {
+  margin-top: 14px;
+  padding: 16px;
+  background: #eef4ff;
+  border-radius: 12px;
+  border: 1px solid #d3ddf6;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Inputs */
+.sub-form input[type="text"],
+.sub-form input[type="file"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #cbd6e4;
+  border-radius: 10px;
+  background: #f8fafc;
+  transition: 0.2s;
+}
+
+/* Hover + focus */
+.sub-form input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+}
+
+/* Submit Button */
+.sub-form button {
+  align-self: center;
+  width: 240px;
+  padding: 12px;
+  font-size: 15px;
+  background: #083b73;
+  color: white;
+  font-weight: 700;
+  border-radius: 10px;
+  border: none;
+  transition: 0.2s ease;
+}
+
+.sub-form button:hover {
+  transform: translateY(-2px);
+}
+
+/* -----------------------------------------------
+   MOBILE VIEW
+----------------------------------------------- */
+@media (max-width: 768px) {
+
+  .sub-form {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .sub-form input[type="text"],
+  .sub-form input[type="file"] {
+    padding: 11px 12px;
+
+    font-size: 14px;
+  }
+
+  .sub-form button {
+    width: 100%; /* mobile full width */
+    padding: 11px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+}
+
+/* ---------------------------------------------------
+   PAGINATION
+--------------------------------------------------- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.pagination button {
+  background: #13385a;
+  color: white;
+  padding: 7px 12px;
+  border-radius: 8px;
+}
+
+/* ---------------------------------------------------
+   MOBILE (LIST VIEW ONLY)
+--------------------------------------------------- */
+@media (max-width: 768px) {
+
+  /* keep TABLE visible on mobile */
+  .category-list table {
+    display: table !important;
+  }
+
+  /* allow horizontal scroll */
+  .category-list {
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .category-list table {
+    min-width: 900px;
+  }
+
+  /* form full width */
+  .category-form .form-row {
+    flex-direction: column;
+  }
+
+  .category-form input,
+  .category-form button {
+    width: 100% !important;
+  }
+
+  .sub-form input,
+  .sub-form button {
+    width: 100% !important;
+  }
+
+  /* dots menu reposition */
+  .dots-menu {
+    right: 4px;
+  }
+}
+/* ------------------- SMALL MODERN MODAL ------------------- */
+.cm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+  padding: 12px;
+  backdrop-filter: blur(3px);
+}
+
+.cm-modal {
+  width: 320px;  /* small size */
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+  animation: fadePop 0.18s ease;
+}
+
+@keyframes fadePop {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.cm-modal h3 {
+  margin: 0 0 14px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #13385a;
+  text-align: center;
+}
+
+.cm-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.cm-modal input[type="text"],
+.cm-modal input[type="file"] {
+  padding: 10px 12px;
+  border: 1px solid #ccd6e0;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.modal-preview {
+  width: 85px;
+  height: 85px;
+  margin: 8px auto;
+  border-radius: 10px;
+  border: 1px solid #d9e2ec;
+  overflow: hidden;
+}
+
+.modal-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-primary {
+  flex: 1;
+  padding: 9px 12px;
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 9px 12px;
+  background: #adb5bd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.add-cat-btn {
+  background: #0d6efd;
+  color: white;
+  padding: 12px 18px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-cat-btn:hover {
+  background: #084298;
+  transform: translateY(-2px);
+}
+.catlist-search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px; /* GAP for search bar */
+}
+/* SEARCH BAR */
+.catlist-search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;   /* 👈 GAP ADDED */
+}
+
+/* ADD CATEGORY BUTTON */
+.add-cat-btn {
+  background: #0d6efd;
+  color: white;
+  padding: 12px 18px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  margin-top: 10px;      /* 👈 Search bar se neeche */
+  margin-bottom: 20px;   /* 👈 Table se gap */
+  cursor: pointer;
+  transition: 0.2s;
+}
+/* MOBILE TABLE COMPACT VIEW */
+@media (max-width: 768px) {
+  .category-list th,
+  .category-list td {
+    padding:6px 25px !important;   /* 👈 padding bohot kam */
+    font-size: 13px;               /* 👈 text size thoda chota */
+  }
+
+  .table-img {
+    width: 20px;        /* 👈 image small */
+    height: 20px;
+    border-radius: 6px;
+  }
+
+  .sub-thumb {
+    width: 8px; 
+    height: 8px;
+  }
+
+  .sub-item {
+    padding: 6px 8px;  /* Subcategory cards also compact */
+  }
+
+  .dots-btn {
+    font-size: 18px;
+    padding: 2px 4px;
+  }
+}
+
+
+
+
+ .dots-btn {
+    font-size: 16px !important;
+    padding: 2px 3px !important;
+  }
+
+  /* Small, tight popup menu */
+  .dots-menu {
+    min-width: 100px !important;
+    padding: 3px 5px !important;
+    border-radius: 6px !important;
+
+    /* IMPORTANT: on mobile open UP */
+    top: auto !important;
+    bottom: 100% !important;
+  }
+
+  /* Edit/Delete smaller */
+  .menu-item {
+    padding: 7px 26px !important;
+    font-size: 11px !important;
+    border-radius: 4px !important;
+  }
+
+  /* Prevent clipping */
+  .dots-wrap {
+    overflow: visible !important;
+  }
+
+  /* Give space so last menu doesn't overlap pagination */
+  .pagination {
+    margin-top: 45px !important;
+  }
+
+
+
+@media (max-width: 768px) {
+
+  /* Header gap reduce */
+  .category-list th {
+    padding: 16px 0px !important;       /* 👈 super tight spacing */
+    font-size: 11px !important;        /* smaller text */
+  }
+
+  .category-list td {
+    padding: 25px 2px !important;       /* 👈 body spacing also reduced */
+    font-size: 12px !important;
+  }
+
+  /* Column widths tight */
+  .category-list th:nth-child(1),
+  .category-list td:nth-child(1) {
+    width: 25px !important;
+  }
+
+  .category-list th:nth-child(2),
+  .category-list td:nth-child(2) {
+    width: 40px !important;
+  }
+
+  .category-list th:nth-child(3),
+  .category-list td:nth-child(3) {
+    width: 80px !important;
+  }
+
+  .category-list th:nth-child(4),
+  .category-list td:nth-child(4) {
+    width: 80px !important;
+  }
+
+  .category-list th:nth-child(5),
+  .category-list td:nth-child(5) {
+    width: 50px !important;
+  }
+
+  /* Table ko compact horizontal layout */
+  .category-list table {
+    min-width: 400px !important;  /* pehle 900 tha → ab tight */
+  }
+
+  /* 3 dots even smaller */
+  .dots-btn {
+    font-size: 14px !important;
+    padding: 2px !important;
+  }
+
+  /* 3 dots menu compact */
+  .menu-item {
+    padding: 5px 6px !important;
+    font-size: 11px !important;
+  
+  }
+}
+/* --------------- MOBILE FIX FOR DOTS MENU --------------- */
+@media (max-width: 768px) {
+
+  /* 3 dots smaller */
+  .dots-btn {
+    font-size: 15px !important;
+    padding: 1px 3px !important;
+  }
+
+  /* Compact dots menu */
+  .dots-menu {
+    min-width: 40px !important;        /* 👈 width smaller */
+    padding: 1px 4px !important;       /* 👈 inner padding small */
+    border-radius: 6px !important;
+  }
+
+  /* Edit/Delete items smaller */
+  .menu-item {
+    padding: 4px px !important;       /* 👈 height small */
+    font-size: 10px !important;        /* 👈 text small */
+    border-radius: 4px !important;
+    width: 43px;
+  }
+
+  /* LAST ITEM menu overlapping fix → always open upward */
+  .dots-wrap {
+    overflow: visible !important;
+  }
+
+  .dots-menu {
+    top: auto !important;
+    bottom: 105% !important;           /* 👈 menu upar open hoga */
+  }
+
+  /* Pagination ka extra gap so menu overlap na kare */
+  .pagination {
+    margin-top: 40px !important;       /* 👈 lower space */
+  }
+}
+/* ---------- MOBILE ONLY DOTS MENU FIX ---------- */
+@media (max-width: 768px) {
+
+  /* Make 3 dots smaller */
+  .dots-btn {
+    font-size: 16px !important;
+    padding: 2px 3px !important;
+  }
+
+  /* Small, tight popup menu */
+  .dots-menu {
+    min-width: 80px !important;
+    
+    padding: 3px 5px !important;
+    border-radius: 6px !important;
+
+    /* IMPORTANT: on mobile open UP */
+    top: auto !important;
+    bottom: 100% !important;
+  }
+
+  /* Edit/Delete smaller */
+  .menu-item {
+    padding: 4px 6px !important;
+    font-size: 10px !important;
+    border-radius: 4px !important;
+    
+  }
+
+  /* Prevent clipping */
+  .dots-wrap {
+    overflow: visible !important;
+  }
+
+  /* Give space so last menu doesn't overlap pagination */
+  .pagination {
+    margin-top: 45px !important;
+  }
+}
+/* ----------- NEW HEADER ROW (Search Left, Button Right) ----------- */
+.header-row {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Search input styling */
+.search-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #cfd8e3;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #ffffff;
+  outline: none;
+  transition: 0.2s;
+}
+
+.search-input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+}
+
+/* Add Category button updated */
+.add-cat-btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: #0d6efd;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  white-space: nowrap;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .header-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .add-cat-btn {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+}
+/* ✅ MOBILE TOP SEARCH + BUTTON PERFECT FIT */
+@media (max-width: 768px) {
+
+  .header-row-fixed {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 0 6px !important;
+    width: 100% !important;
+  }
+
+  .search-input-fixed {
+    width: 70% !important;     /* ✅ screen se bahar nahi jayega */
+    padding: 9px 10px !important;
+    font-size: 13px !important;
+    border-radius: 8px !important;
+  }
+
+  .add-cat-btn-fixed {
+    width: 30% !important;    /* ✅ chhota button */
+    padding: 9px 8px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+  }
+}
+/* ✅ SUPER CLEAN MINI 3D EDIT / DELETE BUTTONS */
+.menu-item {
+  padding: 5px 8px !important;    /* ✅ chhoti height */
+  font-size: 11px !important;     /* ✅ chhota font */
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  margin: 3px 0 !important;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.18) !important;
+  transition: all 0.15s ease !important;
+}
+
+/* ✅ EDIT → BLUE */
+.menu-item:first-child {
+  background: linear-gradient(135deg, #2563eb, #60a5fa) !important;
+}
+
+/* ✅ DELETE → RED */
+.menu-item:last-child {
+  background: linear-gradient(135deg, #dc2626, #f87171) !important;
+}
+
+/* ✅ PRESS EFFECT */
+.menu-item:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+/* ✅ SUB CATEGORY INPUT WIDTH +10PX ONLY */
+.sub-form input[type="text"] {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+/* ✅ PREMIUM ADD CATEGORY FORM CARD */
+.top-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.category-form {
+  width: 100%;
+  max-width: 700px;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
+  border-radius: 16px;
+  padding: 20px 18px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+  border: 1px solid #e3e8f3;
+  animation: formPop 0.25s ease;
+}
+
+@keyframes formPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ✅ Inputs row clean */
+.category-form .form-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 14px;
+}
+
+/* ✅ Text + File input premium look */
+.category-form input[type="text"],
+.category-form input[type="file"] {
+  padding: 12px 14px !important;
+  font-size: 14px !important;
+  border-radius: 10px !important;
+  border: 1px solid #cfd8e3 !important;
+  background: #ffffff !important;
+  outline: none;
+  transition: 0.2s;
+}
+
+.category-form input:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220,53,69,0.15);
+}
+
+/* ✅ Add / Update button premium */
+.category-form button {
+  background: linear-gradient(135deg, #dc3545, #ff6b6b) !important;
+  color: #fff;
+  padding: 11px 20px !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+  transition: all 0.2s ease;
+}
+
+.category-form button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.18);
+}
+
+/* ✅ MOBILE VERSION PERFECT */
+@media (max-width: 768px) {
+
+  .category-form {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+
+  .category-form .form-row {
+    grid-template-columns: 1fr !important; /* ✅ stack vertically */
+  }
+
+  .category-form input[type="text"],
+  .category-form input[type="file"] {
+    font-size: 14px !important;
+    padding: 11px 12px !important;
+  }
+
+  .category-form button {
+    width: 100%;
+    font-size: 14px !important;
+    padding: 11px !important;
+  }
+}
+/* ✅ ONLY SUBCATEGORY INPUT – MOBILE SIZE BIGGER */
+@media (max-width: 768px) {
+
+  .sub-form input[type="text"] {
+    padding: 4px 104px !important;   /* ✅ height increase */
+    font-size: 16px !important;     /* ✅ text bada */
+    border-radius: 10px !important;
+  }
+
+  .sub-form input[type="file"] {
+    padding: 12px !important;
+    font-size: 14px !important;
+  }
+}

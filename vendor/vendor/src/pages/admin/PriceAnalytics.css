@@ -1,0 +1,170 @@
+/* -------- FILTER ROW ALWAYS SAME LINE -------- */
+.filter-section {
+  display: flex;
+  flex-wrap: nowrap !important;     /* NEVER wrap */
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Dropdown Styling */
+.filter-section select,
+.filter-section input[type="date"] {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #cfd8e3;
+  background: #ffffff;
+  font-size: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: 160px;
+}
+
+/* -------- MOBILE VIEW (3 FILTERS EXACT 1 ROW) -------- */
+@media (max-width: 768px) {
+  .filter-section {
+    flex-wrap: nowrap !important;  
+    overflow-x: auto !important;   /* mobile horizontal scroll if required */
+    gap: 10px;
+  }
+
+  .filter-section select,
+  .filter-section input[type="date"] {
+    width: 150px !important;
+  }
+}
+
+
+.analytics-container {
+  max-width: 1200px;
+ text-align: left;
+  font-family: "Inter", sans-serif;
+}
+
+.analytics-title {
+  font-size: 21px;
+  font-weight: 700;
+  text-align: left;
+  color: #dc3545;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.analytics-container h2{
+  text-align: left;
+}
+
+.analytics-subtitle {
+  text-align: center;
+  color: #6c757d;
+  margin-bottom: 25px;
+}
+
+
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.filter-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 4px;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 7px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.btn.refresh {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn.refresh:hover {
+  background: #0056b3;
+}
+
+.chart-wrapper {
+  height: 480px;
+  position: relative;
+}
+
+.loading,
+.no-data {
+  text-align: center;
+  font-weight: 500;
+  color: #6c757d;
+  margin-top: 50px;
+}
+/* -------- FILTER ROW ALWAYS SAME LINE -------- */
+.filter-section {
+  display: flex;
+  flex-wrap: nowrap !important;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Normal desktop size */
+.filter-section select,
+.filter-section input[type="date"] {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #cfd8e3;
+  background: #ffffff;
+  font-size: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: 150px;   /* desktop perfect */
+}
+
+/* -------- MOBILE VIEW (compact width) -------- */
+@media (max-width: 768px) {
+  .filter-section {
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 8px;
+  }
+
+  /* 👇 Choti width for perfect one-line */
+  .filter-section select,
+  .filter-section input[type="date"] {
+    width: 105px !important;    /* ★ PERFECT mobile width */
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-section {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .chart-wrapper {
+    height: 380px;
+  }
+
+  .analytics-title {
+    font-size: 24px;
+  }
+}
