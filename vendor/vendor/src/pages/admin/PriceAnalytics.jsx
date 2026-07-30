@@ -25,7 +25,7 @@
 // // //   Legend
 // // // );
 
-// // // const API_BASE = "https://grocerrybackend.onrender.com/api";
+// // // const API_BASE = "https://deploy-foodhelper.onrender.com/api";
 
 // // // const PriceAnalytics = () => {
 // // //   const [loading, setLoading] = useState(true);
@@ -249,7 +249,7 @@
 // //   ChartDataLabels
 // // );
 
-// // const API_BASE = "https://grocerrybackend.onrender.com/api";
+// // const API_BASE = "https://deploy-foodhelper.onrender.com/api";
 
 // // const PriceAnalytics = () => {
 // //   const [loading, setLoading] = useState(true);
@@ -420,7 +420,7 @@
 // //   ChartDataLabels
 // // );
 
-// // const API_BASE = "https://grocerrybackend.onrender.com/api";
+// // const API_BASE = "https://deploy-foodhelper.onrender.com/api";
 
 // // const PriceAnalytics = () => {
 // //   const [loading, setLoading] = useState(true);
@@ -654,7 +654,7 @@
 //   ChartDataLabels
 // );
 
-// const API_BASE = "https://grocerrybackend.onrender.com/api";
+// const API_BASE = "https://deploy-foodhelper.onrender.com/api";
 
 // export default function PriceAnalytics() {
 //   const [loading, setLoading] = useState(true);
@@ -815,7 +815,7 @@ ChartJS.register(
   ChartDataLabels
 );
 
-const API_BASE = "https://grocerrybackend.onrender.com/api";
+const API_BASE = "https://deploy-foodhelper.onrender.com/api";
 
 export default function PriceAnalytics() {
   const [loading, setLoading] = useState(true);

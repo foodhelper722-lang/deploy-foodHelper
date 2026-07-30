@@ -4,7 +4,7 @@
 // import "react-toastify/dist/ReactToastify.css";
 
 // /* ================= CONFIG ================= */
-// const API = "https://grocerrybackend.onrender.com/api/admin/categories";
+// const API = "https://deploy-foodhelper.onrender.com/api/admin/categories";
 
 // const api = axios.create();
 // api.interceptors.request.use((req) => {
@@ -419,7 +419,7 @@ import "react-toastify/dist/ReactToastify.css";
 /* ============================================================
    CONFIG
    ============================================================ */
-const API = "https://grocerrybackend.onrender.com/api/admin/categories";
+const API = "https://deploy-foodhelper.onrender.com/api/admin/categories";
 
 const api = axios.create();
 api.interceptors.request.use((req) => {

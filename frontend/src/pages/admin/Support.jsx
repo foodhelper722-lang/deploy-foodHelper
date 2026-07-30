@@ -2,7 +2,7 @@
 // import axios from "axios";
 // import "./Support.css";
 
-// const API_BASE = "https://grocerrybackend.onrender.com/api";
+// const API_BASE = "https://deploy-foodhelper.onrender.com/api";
 
 // export default function Support() {
 //   const [tickets, setTickets] = useState([]);
@@ -262,7 +262,7 @@ import {
   ChevronRight
 } from "lucide-react";
 
-const API_BASE = "https://grocerrybackend.onrender.com/api";
+const API_BASE = "https://deploy-foodhelper.onrender.com/api";
 
 export default function Support() {
   const [tickets, setTickets] = useState([]);

@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ProductList.css";
 
-const API_URL = "https://grocerrybackend.onrender.com/api/prices";
-const CATEGORY_URL = "https://grocerrybackend.onrender.com/api/categories";
+const API_URL = "https://deploy-foodhelper.onrender.com/api/prices";
+const CATEGORY_URL = "https://deploy-foodhelper.onrender.com/api/categories";
 
 function ProductList() {
   const [items, setItems] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "https://grocerrybackend.onrender.com/api/brokers";
+const API_URL = "https://deploy-foodhelper.onrender.com/api/brokers";
 
 export default function BrokersList() {
   const [brokers, setBrokers] = useState([]);

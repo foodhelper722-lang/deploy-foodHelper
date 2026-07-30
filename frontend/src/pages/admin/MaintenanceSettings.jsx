@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-const API = "https://grocerrybackend.onrender.com/api/app";
+const API = "https://deploy-foodhelper.onrender.com/api/app";
 
 export default function MaintenanceSettings() {
   const [loading, setLoading] = useState(false);

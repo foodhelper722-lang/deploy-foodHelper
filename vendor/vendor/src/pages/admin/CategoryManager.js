@@ -7,7 +7,7 @@
 // import "./CategoryManager.css";
 
 
-// const API_BASE = "https://grocerrybackend.onrender.com/api/categories";
+// const API_BASE = "https://deploy-foodhelper.onrender.com/api/categories";
 
 // const emptyCategoryForm = { name: "", image: null };
 // const emptySubForm = { name: "", image: null };
@@ -652,7 +652,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./CategoryManager.css";
 
-const API_BASE = "https://grocerrybackend.onrender.com/api/categories";
+const API_BASE = "https://deploy-foodhelper.onrender.com/api/categories";
 
 const emptyCategoryForm = { name: "", image: null };
 const emptySubForm = { name: "", image: null };

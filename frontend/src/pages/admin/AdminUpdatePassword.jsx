@@ -36,7 +36,7 @@
 //       const token = localStorage.getItem("token");
 
 //       await axios.put(
-//         "https://grocerrybackend.onrender.com/api/admin/update-password",
+//         "https://deploy-foodhelper.onrender.com/api/admin/update-password",
 //         {
 //           oldPassword,
 //           newPassword,
@@ -238,7 +238,7 @@ export default function AdminUpdatePassword() {
       const token = localStorage.getItem("token");
 
       await axios.put(
-        "https://grocerrybackend.onrender.com/api/admin/update-password",
+        "https://deploy-foodhelper.onrender.com/api/admin/update-password",
         { oldPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );

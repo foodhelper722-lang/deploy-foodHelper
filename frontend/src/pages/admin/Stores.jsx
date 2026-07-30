@@ -2,7 +2,7 @@
 // import axios from "axios";
 // import "./Stores.css";
 
-// const API = "https://grocerrybackend.onrender.com/api/stores";
+// const API = "https://deploy-foodhelper.onrender.com/api/stores";
 
 // export default function Stores() {
 //   const emptyForm = {
@@ -201,7 +201,7 @@
 // import axios from "axios";
 // import { Edit, Trash2, Plus, X, Store, MapPin, Clock, Loader2 } from "lucide-react";
 
-// const API = "https://grocerrybackend.onrender.com/api/stores";
+// const API = "https://deploy-foodhelper.onrender.com/api/stores";
 
 // export default function Stores() {
 //   const emptyForm = {
@@ -501,7 +501,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Edit, Trash2, Plus, X, Store, MapPin, Loader2 } from "lucide-react";
 
-const API = "https://grocerrybackend.onrender.com/api/stores";
+const API = "https://deploy-foodhelper.onrender.com/api/stores";
 
 export default function Stores() {
   const emptyForm = {

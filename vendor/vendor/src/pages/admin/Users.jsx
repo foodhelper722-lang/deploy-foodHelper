@@ -3,7 +3,7 @@
 // import axios from "axios";
 // import "./Users.css";
 
-// const API = "https://grocerrybackend.onrender.com/api/user";
+// const API = "https://deploy-foodhelper.onrender.com/api/user";
 
 // export default function Users() {
 //   const [users, setUsers] = useState([]);

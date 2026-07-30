@@ -17,7 +17,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("https://grocerrybackend.onrender.com/api/admin/login", {
+      const res = await axios.post("https://deploy-foodhelper.onrender.com/api/admin/login", {
         email,
         password,
       });

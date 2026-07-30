@@ -2,7 +2,7 @@
 // // import axios from "axios";
 // // import "./CategoryList.css";
 
-// // const API = "https://grocerrybackend.onrender.com/api/categories";
+// // const API = "https://deploy-foodhelper.onrender.com/api/categories";
 
 // // export default function CategoryList() {
 // //   const [categories, setCategories] = useState([]);
@@ -68,7 +68,7 @@
 // import axios from "axios";
 // import "./CategoryList.css";
 
-// const API = "https://grocerrybackend.onrender.com/api/categories";
+// const API = "https://deploy-foodhelper.onrender.com/api/categories";
 
 // export default function CategoryList() {
 //   const [categories, setCategories] = useState([]);
@@ -169,7 +169,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./CategoryList.css";
 
-const API = "https://grocerrybackend.onrender.com/api/categories";
+const API = "https://deploy-foodhelper.onrender.com/api/categories";
 
 export default function CategoryList() {
   const [categories, setCategories] = useState([]);

@@ -9,9 +9,9 @@
 // //   Store, Eye, Users, Calendar,
 // // } from "lucide-react";
 
-// // const ORDER_API   = "https://grocerrybackend.onrender.com/api/orders";
-// // const RIDER_API   = "https://grocerrybackend.onrender.com/api/riders";
-// // const PRODUCT_API = "https://grocerrybackend.onrender.com/api/categories/with-products";
+// // const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
+// // const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
+// // const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/categories/with-products";
 
 // // const FALLBACK_POLL_INTERVAL = 30_000;
 
@@ -1891,18 +1891,18 @@ import {
   Store, Eye, Users, Calendar, Trash2, PlusCircle,
 } from "lucide-react";
 
-// const ORDER_API   = "https://grocerrybackend.onrender.com/api/orders";
-// const RIDER_API   = "https://grocerrybackend.onrender.com/api/riders";
-// const PRODUCT_API = "https://grocerrybackend.onrender.com/api/public/products";
-// const USER_API    = "https://grocerrybackend.onrender.com/api/user/all";
+// const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
+// const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
+// const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/public/products";
+// const USER_API    = "https://deploy-foodhelper.onrender.com/api/user/all";
 
 
 
 
 const ORDER_API   = "http://localhost:7000/api/orders";
-const RIDER_API   = "https://grocerrybackend.onrender.com/api/riders";
-const PRODUCT_API = "https://grocerrybackend.onrender.com/api/public/products";
-const USER_API    = "https://grocerrybackend.onrender.com/api/user/all";
+const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
+const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/public/products";
+const USER_API    = "https://deploy-foodhelper.onrender.com/api/user/all";
 
 const FALLBACK_POLL_INTERVAL = 30_000;
 
@@ -1988,7 +1988,7 @@ const mapPublicProduct = (p) => ({
 });
 
 // ─── Fetch ALL products from the public products API (handles pagination) ────
-// GET https://grocerrybackend.onrender.com/api/public/products?page=1&limit=100
+// GET https://deploy-foodhelper.onrender.com/api/public/products?page=1&limit=100
 const fetchAllPublicProducts = async () => {
   const limit = 100;
   let page = 1;

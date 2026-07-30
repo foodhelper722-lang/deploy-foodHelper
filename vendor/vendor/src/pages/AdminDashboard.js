@@ -33,7 +33,7 @@
 
 //     // Try to fetch stats (backend must expose /api/admin/stats)
 //     axios
-//       .get('https://grocerrybackend.onrender.com/api/admin/stats', { headers: { Authorization: 'Bearer ' + token } })
+//       .get('https://deploy-foodhelper.onrender.com/api/admin/stats', { headers: { Authorization: 'Bearer ' + token } })
 //       .then((res) => setStats(res.data))
 //       .catch((err) => {
 //         // if unauthorized, logout and redirect
@@ -46,7 +46,7 @@
 //       });
 
 //     axios
-//       .get('https://grocerrybackend.onrender.com/api/admin/recent', { headers: { Authorization: 'Bearer ' + token } })
+//       .get('https://deploy-foodhelper.onrender.com/api/admin/recent', { headers: { Authorization: 'Bearer ' + token } })
 //       .then((res) => setRecent(res.data))
 //       .catch(() => {});
 //   }, [navigate]);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Inventory.css";
 
-const API = "https://grocerrybackend.onrender.com/api";
+const API = "https://deploy-foodhelper.onrender.com/api";
 
 export default function AdminInventory() {
   const [products, setProducts] = useState([]);

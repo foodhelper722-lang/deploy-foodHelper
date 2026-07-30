@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./DescriptionManager.css";
 
-const API = "https://grocerrybackend.onrender.com/api/descriptions";
+const API = "https://deploy-foodhelper.onrender.com/api/descriptions";
 
 export default function DescriptionManager() {
   const [items, setItems] = useState([]);

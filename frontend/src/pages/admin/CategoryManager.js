@@ -8,7 +8,7 @@ import {
 } from "react-feather";
 import "./CategoryManager.css";
 
-const API_BASE = "https://grocerrybackend.onrender.com/api/categories";
+const API_BASE = "https://deploy-foodhelper.onrender.com/api/categories";
 
 const emptyCategoryForm = { name: "", image: null };
 const emptySubForm      = { name: "", image: null };

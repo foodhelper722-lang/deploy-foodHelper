@@ -2,7 +2,7 @@
 // import axios from "axios";
 
 // const API_URL      = "https://foodhelpervendor.onrender.com/api/vendor/products";
-// const CATEGORY_URL = "https://grocerrybackend.onrender.com/api/categories";
+// const CATEGORY_URL = "https://deploy-foodhelper.onrender.com/api/categories";
 // const BRAND_API    = "https://foodhelpervendor.onrender.com/api/brands";
 // const HSN_API_URL  = `${API_URL}/hsn-codes`;
 // const BULK_API_URL = "https://foodhelpervendor.onrender.com/api/vendor/bulk-discounts";
@@ -2461,7 +2461,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 
 const API_URL      = "https://foodhelpervendor.onrender.com/api/vendor/products";
-const CATEGORY_URL = "https://grocerrybackend.onrender.com/api/categories";
+const CATEGORY_URL = "https://deploy-foodhelper.onrender.com/api/categories";
 const BRAND_API    = "https://foodhelpervendor.onrender.com/api/brands";
 const HSN_API_URL  = `${API_URL}/hsn-codes`;
 const BULK_API_URL = "https://foodhelpervendor.onrender.com/api/vendor/bulk-discounts";
