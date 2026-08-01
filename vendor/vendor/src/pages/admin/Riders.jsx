@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Riders.css";
 
-const API = "https://foodhelpervendor.onrender.com/api/riders";
+const API = "https://deploy-foodhelper.onrender.com/api/riders";
 
 export default function Riders() {
   const empty = {

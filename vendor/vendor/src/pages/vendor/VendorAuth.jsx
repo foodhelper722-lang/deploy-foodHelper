@@ -2,7 +2,7 @@
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
-// const API = "https://foodhelpervendor.onrender.com/api/vendor";
+// const API = "https://deploy-foodhelper.onrender.com/api/vendor";
 
 // export default function VendorAuth() {
 //   const navigate = useNavigate();
@@ -225,7 +225,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API = "https://foodhelpervendor.onrender.com/api/vendor";
+const API = "https://deploy-foodhelper.onrender.com/api/vendor";
 
 export default function VendorAuth() {
   const navigate = useNavigate();

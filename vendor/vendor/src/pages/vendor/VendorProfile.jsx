@@ -1,7 +1,7 @@
 // import React, { useState } from "react";
 // import axios from "axios";
 
-// const API_URL = "https://foodhelpervendor.onrender.com/api/vendor/profile/change-password";
+// const API_URL = "https://deploy-foodhelper.onrender.com/api/vendor/profile/change-password";
 
 // const axiosAuth = axios.create();
 // axiosAuth.interceptors.request.use((config) => {
@@ -420,8 +420,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const PROFILE_API  = "https://foodhelpervendor.onrender.com/api/vendor/profile";
-const PASSWORD_API = "https://foodhelpervendor.onrender.com/api/vendor/profile/change-password";
+const PROFILE_API  = "https://deploy-foodhelper.onrender.com/api/vendor/profile";
+const PASSWORD_API = "https://deploy-foodhelper.onrender.com/api/vendor/profile/change-password";
 
 const axiosAuth = axios.create();
 axiosAuth.interceptors.request.use((config) => {

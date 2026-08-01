@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Support.css";
 
-const API_BASE = "https://foodhelpervendor.onrender.com/api";
+const API_BASE = "https://deploy-foodhelper.onrender.com/api";
 
 export default function Support() {
   const [tickets, setTickets] = useState([]);

@@ -198,7 +198,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Users.css";
 
-const API = "https://foodhelpervendor.onrender.com/api/user/all";
+const API = "https://deploy-foodhelper.onrender.com/api/user/all";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
