@@ -102,6 +102,9 @@ app.use(
   "/api/vendor/bulk-discounts",
   require("./routes/vendorBulkDiscountRoutes"),
 );
+app.use("/api/banners", require("./routes/bannerRoutes"));
+app.use("/api/advertising-banner", require("./routes/advertisingBannerRoutes"));
+app.use("/api/service-areas", require("./routes/serviceAreaRoutes"));
 /* ================================
    HEALTH CHECK
 ================================ */

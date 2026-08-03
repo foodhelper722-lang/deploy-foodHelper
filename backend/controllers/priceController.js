@@ -125,12 +125,13 @@ exports.getPrices = async (req, res) => {
       result[catId].subcategories[subId].products.push({
         _id: p._id,
         name: p.name,
-          weight: p.weight || { value: 1, unit: "kg" }, 
+        weight: p.weight || { value: 1, unit: "kg" },
         basePrice: p.basePrice,
         profitLoss: p.profitLoss,
-          gstPercent: p.gstPercent || 0,
-  hsnCode: p.hsnCode || "",
-  taxType: p.taxType || "cgst_sgst",
+        mrp: p.mrp || 0,
+        gstPercent: p.gstPercent || 0,
+        hsnCode: p.hsnCode || "",
+        taxType: p.taxType || "cgst_sgst",
         salePrice: p.salePrice,
         lockedPrice: p.lockedPrice,
         yesterdayLock: p.yesterdayLock,
@@ -206,12 +207,13 @@ exports.getWebsitePrices = async (req, res) => {
       result[catId].subcategories[subId].products.push({
         _id: p._id,
         name: p.name,
-          weight: p.weight || { value: 1, unit: "kg" }, 
+        weight: p.weight || { value: 1, unit: "kg" },
         basePrice: p.basePrice,
         profitLoss: p.profitLoss,
-          gstPercent: p.gstPercent || 0,
-  hsnCode: p.hsnCode || "",
-  taxType: p.taxType || "cgst_sgst",
+        mrp: p.mrp || 0,
+        gstPercent: p.gstPercent || 0,
+        hsnCode: p.hsnCode || "",
+        taxType: p.taxType || "cgst_sgst",
         salePrice: p.salePrice,
         lockedPrice: p.lockedPrice,
         yesterdayLock: p.yesterdayLock,
@@ -248,6 +250,7 @@ exports.createPrice = async (req, res) => {
     const base = Number(req.body.basePrice);
     const pl = Number(req.body.profitLoss || 0);
     const gst = Number(req.body.gstPercent || 0);
+    const mrp = Number(req.body.mrp || 0);
 
     /* ================= WEIGHT SAFE ================= */
     let weight = { value: 1, unit: "kg" };
@@ -309,6 +312,7 @@ if (req.body.subcategory) {
       basePrice: base,
       profitLoss: pl,
       salePrice: sale,
+      mrp,
       gstPercent: gst,
       hsnCode: req.body.hsnCode || "",
       taxType: req.body.taxType || "cgst_sgst",
@@ -395,6 +399,10 @@ if (req.body.weight) {
     // 📈 Profit / Loss
     if (req.body.profitLoss !== undefined)
       item.profitLoss = Number(req.body.profitLoss);
+
+    // 💵 MRP
+    if (req.body.mrp !== undefined)
+      item.mrp = Number(req.body.mrp);
 
     // 🧾 GST
     const gst = req.body.gstPercent !== undefined

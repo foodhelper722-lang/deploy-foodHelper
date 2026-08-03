@@ -4597,18 +4597,21 @@ export default function PriceList() {
         const flat = [];
         (res.data.data || []).forEach((cat) => {
           (cat.subcategories || []).forEach((sub) => {
-            (sub.subSubcategories || []).forEach((subSub) => {
-              (subSub.products || []).forEach((p) => {
-                flat.push({
-                  ...p,
-                  category:       { _id: cat.id,  name: cat.name,  image: cat.image  },
-                  subcategory:    { _id: sub.id,   name: sub.name,  image: sub.image  },
-                  subSubcategory: subSub.id ? { id: subSub.id, name: subSub.name } : null,
-                });
+            const products = Array.isArray(sub.products)
+              ? sub.products
+              : [];
+
+            products.forEach((p) => {
+              flat.push({
+                ...p,
+                category: { _id: cat.id, name: cat.name, image: cat.image },
+                subcategory: { _id: sub.id, name: sub.name, image: sub.image },
+                subSubcategory: sub.subSubcategory || null,
               });
             });
           });
         });
+
         flat.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setItems(flat);
       }

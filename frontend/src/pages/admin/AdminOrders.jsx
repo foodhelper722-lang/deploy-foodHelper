@@ -1899,10 +1899,11 @@ import {
 
 
 
-const ORDER_API   = "http://localhost:7000/api/orders";
+const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
 const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
 const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/public/products";
 const USER_API    = "https://deploy-foodhelper.onrender.com/api/user/all";
+const CREATE_CUSTOMER_API = "https://deploy-foodhelper.onrender.com/api/user/admin/create-customer";
 
 const FALLBACK_POLL_INTERVAL = 30_000;
 
@@ -3357,6 +3358,7 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
   const productSearchRef = useRef(null);
   const priceRefs = useRef([]);
   const qtyRefs = useRef([]);
+  const paymentRefs = useRef([]);
   const paymentModeRef = useRef(null);
   const paidAmountRef = useRef(null);
   const productItemRefs = useRef([]);
@@ -3449,8 +3451,8 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
       name:  prev.name  || u.name  || "",
       phone: prev.phone || u.phone || "",
     }));
-    // move focus to product search for quick flow
-    setTimeout(() => { if (productSearchRef.current) productSearchRef.current.focus(); }, 50);
+    // move focus directly into the product search flow so the user can continue creating the order without extra clicks
+    setTimeout(() => { if (productSearchRef.current) { productSearchRef.current.focus(); productSearchRef.current.select(); } }, 50);
   };
 
   const addProduct = (product) => {
@@ -3775,25 +3777,39 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                           setError("Customer name is required.");
                           return;
                         }
-                        setError("");
-                        const payload = {
-                          name: manualName.trim(),
-                          phone: manualPhone.trim(),
-                          email: "",
-                          address: [address.street, address.area, address.city, address.state, address.pincode].filter(Boolean).join(", "),
-                        };
 
-                        if (!manualName.trim()) {
-                          setError("Customer name is required.");
-                          return;
-                        }
-                        setSelectedUser(null);
-                        setGuestCustomerName(manualName.trim());
-                        setGuestCustomerPhone(manualPhone.trim());
-                        setShowAddCustomerPopup(false);
                         setError("");
-                        setUserSearch("");
-                        setShowUserPanel(false);
+                        try {
+                          const payload = {
+                            name: manualName.trim(),
+                            phone: manualPhone.trim(),
+                            address: [address.street, address.area, address.city, address.state, address.pincode].filter(Boolean).join(", "),
+                          };
+
+                          const res = await axios.post(CREATE_CUSTOMER_API, payload, {
+                            headers: { Authorization: `Bearer ${token}` },
+                          });
+
+                          const createdUser = res.data?.data;
+                          if (createdUser) {
+                            setAllUsers((prev) => [createdUser, ...prev.filter((u) => u._id !== createdUser._id)]);
+                            setSelectedUser(createdUser);
+                            setUserSearch("");
+                            setShowUserPanel(false);
+                            setAddress((prev) => ({
+                              ...prev,
+                              name: prev.name || createdUser.name || "",
+                              phone: prev.phone || createdUser.phone || "",
+                              street: prev.street || createdUser.address || "",
+                            }));
+                          }
+
+                          setGuestCustomerName(createdUser?.name || manualName.trim());
+                          setGuestCustomerPhone(createdUser?.phone || manualPhone.trim());
+                          setShowAddCustomerPopup(false);
+                        } catch (err) {
+                          setError(err?.response?.data?.message || "Failed to add customer.");
+                        }
                       }}
                       className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 transition-all"
                     >
@@ -3961,11 +3977,20 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             e.preventDefault();
-                            if (paymentModeRef.current) { paymentModeRef.current.focus(); }
+                            if (paymentRefs.current[0]) {
+                              paymentRefs.current[0].focus();
+                              paymentRefs.current[0].select();
+                            }
                           }
                         }}
                         onChange={(e) => setQty(idx, e.target.value)}
-                        onBlur={(e) => setQty(idx, e.target.value)}
+                        onBlur={(e) => {
+                          setQty(idx, e.target.value);
+                          if (paymentRefs.current[0]) {
+                            paymentRefs.current[0].focus();
+                            paymentRefs.current[0].select();
+                          }
+                        }}
                         className="w-16 text-center text-xs font-bold text-slate-800 border border-gray-200 rounded-lg bg-white py-1"
                       />
                       <button onClick={() => changeQty(idx, 1)} className="w-6 h-6 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-all"><Plus size={10} /></button>
@@ -3995,7 +4020,7 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
               <Wallet size={13} /> Payments
             </span>
             <div className="space-y-3">
-              {['cash', 'online', 'credit'].map((mode) => (
+              {['cash', 'online', 'credit'].map((mode, index) => (
                 <div key={mode} className="grid grid-cols-[100px_minmax(0,1fr)] gap-3 items-center">
                   <div className="text-[11px] font-semibold uppercase text-slate-600">{mode}</div>
                   <div className="relative">
@@ -4004,6 +4029,17 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                       type="text"
                       inputMode="decimal"
                       value={payments[mode]}
+                      ref={(el) => (paymentRefs.current[index] = el)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          const next = paymentRefs.current[index + 1];
+                          if (next) {
+                            next.focus();
+                            next.select();
+                          }
+                        }
+                      }}
                       onChange={(e) => setPayments((prev) => ({ ...prev, [mode]: e.target.value }))}
                       className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-xl text-xs bg-white"
                       placeholder="0"

@@ -106,6 +106,75 @@ exports.login = async (req, res) => {
 };
 
 
+/* ================= ADMIN: CREATE CUSTOMER ================= */
+exports.createCustomerByAdmin = async (req, res) => {
+  try {
+    const { name, phone = "", address = "" } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Customer name is required",
+      });
+    }
+
+    const safeName = name.trim();
+    const safePhone = phone?.trim() || "";
+    const safeAddress = address?.trim() || "";
+
+    const existingUser = safePhone
+      ? await User.findOne({ phone: safePhone })
+      : null;
+
+    if (existingUser) {
+      return res.status(200).json({
+        success: true,
+        message: "Customer already exists",
+        data: existingUser,
+      });
+    }
+
+    const baseEmail = safeName
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "guest";
+
+    const uniqueEmail = `${baseEmail}-${Date.now()}-${Math.floor(Math.random() * 1000)}@guest.local`;
+    const tempPassword = `${safePhone || baseEmail}123!`;
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+
+    const user = await User.create({
+      name: safeName,
+      email: uniqueEmail,
+      phone: safePhone,
+      address: safeAddress,
+      password: hashedPassword,
+      role: "user",
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Customer added successfully",
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    });
+  } catch (err) {
+    console.error("Create customer error:", err.message);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 /* ================= ADMIN: GET ALL USERS ================= */
 exports.getAllUsers = async (req, res) => {
   try {

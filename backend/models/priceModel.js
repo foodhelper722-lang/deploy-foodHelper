@@ -41,6 +41,7 @@ const priceSchema = new mongoose.Schema({
   basePrice: { type: Number, required: true },
   profitLoss: { type: Number, default: 0 },
   salePrice: { type: Number, default: 0 },
+  mrp: { type: Number, default: 0 },
  
   lockedPrice: { type: Number, default: 0 },
   yesterdayLock: { type: Number, default: 0 },

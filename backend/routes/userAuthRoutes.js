@@ -3,6 +3,7 @@ const {
   signup,
   login,
   getAllUsers,
+  createCustomerByAdmin,
 } = require("../controllers/userAuthController");
 
 const adminAuth = require("../middleware/adminAuth");
@@ -14,6 +15,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 
 /* ADMIN ONLY */
+router.post("/admin/create-customer", adminAuth, createCustomerByAdmin);
 router.get("/all", adminAuth, getAllUsers);
 router.get("/admin/all", adminAuth, getAllUsers);
 

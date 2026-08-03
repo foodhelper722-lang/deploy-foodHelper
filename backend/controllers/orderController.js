@@ -469,6 +469,48 @@ const restoreStock = async (
 };
 
 // ─── RESOLVE ITEMS ────────────────────────────────────────────────────────────
+const validateStockAvailability = async (items) => {
+  for (const item of items) {
+    if (item.ownerType === "vendor" && item.vendorId) {
+      const vendorInv = await VendorInventory.findOne({
+        vendor: item.vendorId,
+        product: item.product,
+      });
+
+      if (!vendorInv) {
+        throw { status: 400, message: `${item.name} is currently unavailable` };
+      }
+
+      if (vendorInv.availableStock < item.quantity) {
+        throw { status: 400, message: `${item.name} out of stock` };
+      }
+
+      if (Array.isArray(vendorInv.batches) && vendorInv.batches.length > 0) {
+        const batchQty = vendorInv.batches.reduce((sum, batch) => sum + Number(batch.qty || 0), 0);
+        if (batchQty < item.quantity) {
+          throw { status: 400, message: `${item.name} out of stock` };
+        }
+      }
+    } else {
+      const inv = await Inventory.findOne({ product: item.product });
+      if (!inv) {
+        throw { status: 400, message: `${item.name} is currently unavailable` };
+      }
+
+      if (inv.stock < item.quantity) {
+        throw { status: 400, message: `${item.name} out of stock` };
+      }
+
+      if (Array.isArray(inv.batches) && inv.batches.length > 0) {
+        const batchQty = inv.batches.reduce((sum, batch) => sum + Number(batch.qty || 0), 0);
+        if (batchQty < item.quantity) {
+          throw { status: 400, message: `${item.name} out of stock` };
+        }
+      }
+    }
+  }
+};
+
 const resolveItems = async (rawItems) => {
   if (!Array.isArray(rawItems) || rawItems.length === 0)
     throw { status: 400, message: "Items array required aur empty nahi hona chahiye" };
@@ -756,6 +798,8 @@ const {
     }
 
     const { resolved, totalPrice } = await resolveItems(items);
+
+    await validateStockAvailability(resolved);
 
     const couponResult = await applyCouponIfProvided(couponCode, totalPrice);
 //     let deliveryCharge = 0;

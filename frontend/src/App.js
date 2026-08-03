@@ -102,10 +102,7 @@ export default function App() {
           <Route path="gst" element={<AdminGST />} />
           <Route path="coupons" element={<CouponPage />} />
 <Route path="estimate" element={<Estimateinvoicepage />} />
-<Route
-  path="/admin/service-areas"
-  element={<ServiceAreas />}
-/>
+<Route path="service-areas" element={<ServiceAreas />} />
 
           <Route path="inventory" element={<AdminInventory />} />
           <Route path="reports" element={<Reports />} />
