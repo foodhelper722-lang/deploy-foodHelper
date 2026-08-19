@@ -14,7 +14,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-const API = "https://deploy-foodhelper.onrender.com/api/user/admin/all";
+const API = "http://localhost:7000/api/user/admin/all";
 function downloadCSV(users) {
   const headers = ["#", "Name", "Email", "Phone", "Role", "Email Verified", "Last Login", "Joined"];
   const rows = users.map((u, i) => [

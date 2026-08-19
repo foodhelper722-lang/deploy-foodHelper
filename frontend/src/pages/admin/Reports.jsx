@@ -13,7 +13,7 @@
 //   Loader2
 // } from "lucide-react";
 
-// const API = "https://deploy-foodhelper.onrender.com/api/reports";
+// const API = "http://localhost:7000/api/reports";
 
 // export default function Reports() {
 //   const [reports, setReports] = useState([]);
@@ -256,7 +256,7 @@ import {
   Search
 } from "lucide-react";
 
-const API = "https://deploy-foodhelper.onrender.com/api/reports";
+const API = "http://localhost:7000/api/reports";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);

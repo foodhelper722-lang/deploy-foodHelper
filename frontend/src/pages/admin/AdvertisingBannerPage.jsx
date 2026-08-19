@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const BASE = "https://deploy-foodhelper.onrender.com";
+const BASE = "http://localhost:7000";
 const BANNER_API = `${BASE}/api/advertising-banner`;
 const CATEGORY_API = `${BASE}/api/categories`;
 const PRODUCT_API = `${BASE}/api/public/products`;

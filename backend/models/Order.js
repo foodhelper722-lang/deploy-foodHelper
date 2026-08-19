@@ -218,6 +218,11 @@ const orderItemSchema = new mongoose.Schema(
 
     name: { type: String, required: true },
 
+    serialNo: {
+      type: String,
+      default: "",
+    },
+
     image: {
       type: String,
       default: "",

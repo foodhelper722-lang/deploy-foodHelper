@@ -2,7 +2,7 @@
 // import axios from "axios";
 // import "./AdminGST.css";
 
-// const API = "https://deploy-foodhelper.onrender.com/api";
+// const API = "http://localhost:7000/api";
 
 // export default function AdminGST() {
 //   /* ================= STATE ================= */
@@ -247,7 +247,7 @@ import axios from "axios";
 import { Package, Percent, Hash, Layers, Save, Plus, Edit2, Trash2 } from "react-feather";
 import "./AdminGST.css";
 
-const API = "https://deploy-foodhelper.onrender.com/api";
+const API = "http://localhost:7000/api";
 
 export default function AdminGST() {
 

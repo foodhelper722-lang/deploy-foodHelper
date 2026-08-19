@@ -1,11 +1,11 @@
 // import React, { useEffect, useState, useRef, useCallback } from "react";
 // import axios from "axios";
 
-// const API_URL      = "https://deploy-foodhelper.onrender.com/api/vendor/products";
-// const CATEGORY_URL = "https://deploy-foodhelper.onrender.com/api/categories";
-// const BRAND_API    = "https://deploy-foodhelper.onrender.com/api/brands";
+// const API_URL      = "http://localhost:7000/api/vendor/products";
+// const CATEGORY_URL = "http://localhost:7000/api/categories";
+// const BRAND_API    = "http://localhost:7000/api/brands";
 // const HSN_API_URL  = `${API_URL}/hsn-codes`;
-// const BULK_API_URL = "https://deploy-foodhelper.onrender.com/api/vendor/bulk-discounts";
+// const BULK_API_URL = "http://localhost:7000/api/vendor/bulk-discounts";
 // const TOKEN_KEY    = "vendorToken";
 
 // const axiosAuth = axios.create();
@@ -2460,11 +2460,11 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 
-const API_URL      = "https://deploy-foodhelper.onrender.com/api/vendor/products";
-const CATEGORY_URL = "https://deploy-foodhelper.onrender.com/api/categories";
-const BRAND_API    = "https://deploy-foodhelper.onrender.com/api/brands";
+const API_URL      = "http://localhost:7000/api/vendor/products";
+const CATEGORY_URL = "http://localhost:7000/api/categories";
+const BRAND_API    = "http://localhost:7000/api/brands";
 const HSN_API_URL  = `${API_URL}/hsn-codes`;
-const BULK_API_URL = "https://deploy-foodhelper.onrender.com/api/vendor/bulk-discounts";
+const BULK_API_URL = "http://localhost:7000/api/vendor/bulk-discounts";
 const TOKEN_KEY    = "vendorToken";
 
 const axiosAuth = axios.create();

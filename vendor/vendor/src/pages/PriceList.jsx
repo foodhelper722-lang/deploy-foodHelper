@@ -1,8 +1,8 @@
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // import "./PriceList.css"
-// const API_URL = "https://deploy-foodhelper.onrender.com/api/prices";
-// const CATEGORY_URL = "https://deploy-foodhelper.onrender.com/api/categories";
+// const API_URL = "http://localhost:7000/api/prices";
+// const CATEGORY_URL = "http://localhost:7000/api/categories";
 
 // export default function PriceList() {
 //   const [items, setItems] = useState([]);
@@ -1557,8 +1557,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./PriceList.css"
-const API_URL = "https://deploy-foodhelper.onrender.com/api/prices";
-const CATEGORY_URL = "https://deploy-foodhelper.onrender.com/api/categories";
+const API_URL = "http://localhost:7000/api/prices";
+const CATEGORY_URL = "http://localhost:7000/api/categories";
 
 export default function PriceList() {
   const [items, setItems] = useState([]);

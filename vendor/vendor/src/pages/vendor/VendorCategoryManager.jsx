@@ -14,7 +14,7 @@
 //   Image as ImageIcon,
 // } from "react-feather";
 
-// const API_BASE = "https://deploy-foodhelper.onrender.com/api/vendor/categories";
+// const API_BASE = "http://localhost:7000/api/vendor/categories";
 
 // const api = axios.create({ baseURL: API_BASE });
 // api.interceptors.request.use((req) => {
@@ -404,7 +404,7 @@ import {
 } from "react-feather";
 
 
-const API_BASE = "https://deploy-foodhelper.onrender.com/api/vendor/categories";
+const API_BASE = "http://localhost:7000/api/vendor/categories";
 const api = axios.create({ baseURL: API_BASE });
 api.interceptors.request.use((req) => {
   const token = localStorage.getItem("vendorToken");

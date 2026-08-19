@@ -8,6 +8,7 @@ const Inventory     = require("../models/Inventory");
 const Ledger        = require("../models/inventoryledger");
 const Coupon        = require("../models/couponModel");
 const UnitDef       = require("../models/unitDefModel");
+const DiscountRule   = require("../models/DiscountRule");
 const Vendor        = require("../models/Vendor"); 
 const ServiceArea = require("../models/ServiceArea");
 const VendorInventory = require(
@@ -477,9 +478,9 @@ const validateStockAvailability = async (items) => {
         product: item.product,
       });
 
-      if (!vendorInv) {
-        throw { status: 400, message: `${item.name} is currently unavailable` };
-      }
+      // Some products may be active in the catalog without a stock record yet.
+      // In that case, do not block order creation just because stock has not been initialized.
+      if (!vendorInv) continue;
 
       if (vendorInv.availableStock < item.quantity) {
         throw { status: 400, message: `${item.name} out of stock` };
@@ -493,9 +494,7 @@ const validateStockAvailability = async (items) => {
       }
     } else {
       const inv = await Inventory.findOne({ product: item.product });
-      if (!inv) {
-        throw { status: 400, message: `${item.name} is currently unavailable` };
-      }
+      if (!inv) continue;
 
       if (inv.stock < item.quantity) {
         throw { status: 400, message: `${item.name} out of stock` };
@@ -547,10 +546,24 @@ const resolveItems = async (rawItems) => {
       if (product.status !== "active")
         throw { status: 400, message: `Product active nahi hai: ${product.name}` };
 
+      const qtyRule = await DiscountRule.find({
+        product: product._id,
+        minQty: { $lte: qty },
+        $or: [
+          { maxQty: null },
+          { maxQty: { $gte: qty } },
+          { maxQty: undefined },
+        ],
+      })
+        .sort({ minQty: -1 })
+        .lean();
+
+      const selectedRule = qtyRule[0] || null;
+
       const unitPrice =
-        Number(it.price) ||
-        product.salePrice ||
-        product.price;
+        (selectedRule?.unitPrice != null ? Number(selectedRule.unitPrice) : null) ??
+        (Number(it.price) > 0 ? Number(it.price) : null) ??
+        Number(product.salePrice || product.price || 0);
 
       const weight = product.weight || { value: 1, unit: "pcs" };
 
@@ -616,6 +629,7 @@ const resolveItems = async (rawItems) => {
 
       return {
         product: product._id,
+        serialNo: String(idx + 1),
         name:    product.name,
         image:   product.image || "",
         unitPrice,

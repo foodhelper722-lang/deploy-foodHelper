@@ -2,8 +2,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 
-const INVENTORY_API = "https://deploy-foodhelper.onrender.com/api/vendor/inventory";
-const PRODUCT_API   = "https://deploy-foodhelper.onrender.com/api/vendor/products";
+const INVENTORY_API = "http://localhost:7000/api/vendor/inventory";
+const PRODUCT_API   = "http://localhost:7000/api/vendor/products";
 
 const axiosAuth = axios.create();
 axiosAuth.interceptors.request.use((config) => {

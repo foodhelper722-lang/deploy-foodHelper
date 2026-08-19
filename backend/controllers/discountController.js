@@ -103,6 +103,28 @@ exports.getAllDiscounts = async (req, res) => {
 };
 
 /* ======================================================
+   GET DISCOUNT RULES FOR ONE PRODUCT
+====================================================== */
+exports.getDiscountsByProduct = async (req, res) => {
+  try {
+    const rules = await DiscountRule.find({ product: req.params.productId })
+      .sort({ minQty: 1 });
+
+    return res.json({
+      success: true,
+      count: rules.length,
+      data: rules,
+    });
+  } catch (err) {
+    console.error("Get Product Discounts Error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch product discounts",
+    });
+  }
+};
+
+/* ======================================================
    UPDATE DISCOUNT RULE
 ====================================================== */
 exports.updateDiscount = async (req, res) => {

@@ -1,5 +1,6 @@
 
 const Price = require("../models/priceModel");
+const DiscountRule = require("../models/DiscountRule");
 const cloudinary = require("../utils/cloudinary");
 const Category = require("../models/categoryModel");
 const csv = require("fast-csv");
@@ -325,7 +326,38 @@ if (req.body.subcategory) {
       image: img,
     });
 
-    res.json({ success: true, data: created });
+    let savedRanges = [];
+    let rangesError = null;
+    if (req.body.priceRanges) {
+      try {
+        const priceRanges = JSON.parse(req.body.priceRanges);
+        if (!Array.isArray(priceRanges)) throw new Error("priceRanges must be an array");
+
+        const rules = priceRanges.map((range) => {
+          const minQty = Number(range.minQty);
+          const maxQty = range.maxQty === null || range.maxQty === "" || range.maxQty === undefined
+            ? null
+            : Number(range.maxQty);
+          const unitPrice = Number(range.unitPrice);
+
+          if (!Number.isInteger(minQty) || minQty < 1)
+            throw new Error("Min Qty must be an integer >= 1");
+          if (maxQty !== null && (!Number.isInteger(maxQty) || maxQty < minQty))
+            throw new Error("Max Qty must be >= Min Qty");
+          if (!Number.isFinite(unitPrice) || unitPrice <= 0)
+            throw new Error("Unit Price must be greater than 0");
+
+          return { product: created._id, minQty, maxQty, unitPrice };
+        });
+
+        savedRanges = rules.length ? await DiscountRule.insertMany(rules) : [];
+      } catch (error) {
+        rangesError = error.message;
+        console.error("Price ranges save error:", error.message);
+      }
+    }
+
+    res.json({ success: true, data: created, savedRanges, rangesError });
   } catch (err) {
     console.error("❌ CREATE ERROR:", err.message);
     res.status(500).json({ success: false, message: err.message });

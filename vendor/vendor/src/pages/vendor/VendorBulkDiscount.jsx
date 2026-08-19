@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const DISCOUNT_API = "https://deploy-foodhelper.onrender.com/api/vendor/bulk-discounts";
-const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/vendor/products";
+const DISCOUNT_API = "http://localhost:7000/api/vendor/bulk-discounts";
+const PRODUCT_API = "http://localhost:7000/api/vendor/products";
 
 const axiosAuth = axios.create();
 axiosAuth.interceptors.request.use((config) => {

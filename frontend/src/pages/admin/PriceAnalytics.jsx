@@ -26,7 +26,7 @@
 // // //   ChartDataLabels
 // // // );
 
-// // // const API_BASE = "https://deploy-foodhelper.onrender.com/api";
+// // // const API_BASE = "http://localhost:7000/api";
 
 // // // // ✅ Centralized helper — saare components mein yahi use karo
 // // // const flattenProducts = (data = []) => {
@@ -241,7 +241,7 @@
 // //   ChartDataLabels
 // // );
 
-// // const API_BASE = "https://deploy-foodhelper.onrender.com/api";
+// // const API_BASE = "http://localhost:7000/api";
 
 // // const flattenProducts = (data = []) => {
 // //   const list = [];
@@ -541,7 +541,7 @@
 //   ChartDataLabels
 // );
 
-// const API_BASE = "https://deploy-foodhelper.onrender.com/api";
+// const API_BASE = "http://localhost:7000/api";
 
 // const flattenProducts = (data = []) => {
 //   const list = [];
@@ -841,7 +841,7 @@ ChartJS.register(
   ChartDataLabels
 );
 
-const API_BASE = "https://deploy-foodhelper.onrender.com/api";
+const API_BASE = "http://localhost:7000/api";
 
 const BAR_COLORS = [
   "#3C50E0","#22c55e","#f59e0b","#ef4444","#8b5cf6",

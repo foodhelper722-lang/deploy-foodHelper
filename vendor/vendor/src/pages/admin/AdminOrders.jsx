@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API = "https://deploy-foodhelper.onrender.com/api/orders";
+const API = "http://localhost:7000/api/orders";
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);

@@ -9,9 +9,9 @@
 // //   Store, Eye, Users, Calendar,
 // // } from "lucide-react";
 
-// // const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
-// // const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
-// // const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/categories/with-products";
+// // const ORDER_API   = "http://localhost:7000/api/orders";
+// // const RIDER_API   = "http://localhost:7000/api/riders";
+// // const PRODUCT_API = "http://localhost:7000/api/categories/with-products";
 
 // // const FALLBACK_POLL_INTERVAL = 30_000;
 
@@ -1891,19 +1891,19 @@ import {
   Store, Eye, Users, Calendar, Trash2, PlusCircle,
 } from "lucide-react";
 
-// const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
-// const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
-// const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/public/products";
-// const USER_API    = "https://deploy-foodhelper.onrender.com/api/user/all";
+// const ORDER_API   = "http://localhost:7000/api/orders";
+// const RIDER_API   = "http://localhost:7000/api/riders";
+// const PRODUCT_API = "http://localhost:7000/api/public/products";
+// const USER_API    = "http://localhost:7000/api/user/all";
 
 
 
 
-const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
-const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
-const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/public/products";
-const USER_API    = "https://deploy-foodhelper.onrender.com/api/user/all";
-const CREATE_CUSTOMER_API = "https://deploy-foodhelper.onrender.com/api/user/admin/create-customer";
+const ORDER_API   = "http://localhost:7000/api/orders";
+const RIDER_API   = "http://localhost:7000/api/riders";
+const PRODUCT_API = "http://localhost:7000/api/public/products";
+const USER_API    = "http://localhost:7000/api/user/all";
+const CREATE_CUSTOMER_API = "http://localhost:7000/api/user/admin/create-customer";
 
 const FALLBACK_POLL_INTERVAL = 30_000;
 
@@ -1989,7 +1989,7 @@ const mapPublicProduct = (p) => ({
 });
 
 // ─── Fetch ALL products from the public products API (handles pagination) ────
-// GET https://deploy-foodhelper.onrender.com/api/public/products?page=1&limit=100
+// GET http://localhost:7000/api/public/products?page=1&limit=100
 const fetchAllPublicProducts = async () => {
   const limit = 100;
   let page = 1;
@@ -3344,6 +3344,8 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [productSearch, setProductSearch]     = useState("");
   const [showProductPanel, setShowProductPanel] = useState(false);
+  const [highlightedProductIndex, setHighlightedProductIndex] = useState(-1);
+  const [discountRules, setDiscountRules]     = useState([]);
 
   // Coupon / payment
   const [couponCode, setCouponCode]   = useState("");
@@ -3380,6 +3382,29 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
     };
     load();
   }, []);
+
+  useEffect(() => {
+    const loadDiscountRules = async () => {
+      try {
+        const res = await axios.get("http://localhost:7000/api/discount/all");
+        setDiscountRules(res.data?.data || res.data || []);
+      } catch (err) {
+        console.warn("Failed to load discount rules:", err);
+        setDiscountRules([]);
+      }
+    };
+    loadDiscountRules();
+  }, []);
+
+  useEffect(() => {
+    if (!cartItems.length) return;
+
+    setCartItems((prev) => prev.map((item) => {
+      const product = allProducts.find((p) => String(p._id) === String(item.productId));
+      const nextUnitPrice = getPriceForProductQty(product, item.quantity);
+      return Number(nextUnitPrice) === Number(item.unitPrice) ? item : { ...item, unitPrice: nextUnitPrice };
+    }));
+  }, [discountRules, allProducts]);
 
   // ── Load ALL users once (backend has no search support) ──
   useEffect(() => {
@@ -3426,6 +3451,43 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
   }, [userSearch, allUsers]);
 
   // ── Products: show existing list on focus, filter live while typing ──
+  const getActiveRangeInfo = (product, qty) => {
+    const safeQty = Number(qty);
+    const productId = String(product?._id || product?.id || "");
+    const basePrice = Number(product?.salePrice ?? product?.basePrice ?? product?.price ?? 0);
+
+    if (!productId || !Number.isFinite(safeQty) || safeQty <= 0) {
+      return { unitPrice: basePrice, label: null };
+    }
+
+    const matched = (discountRules || [])
+      .filter((rule) => String(rule.product?._id || rule.product || "") === productId)
+      .filter((rule) => {
+        const minQty = Number(rule.minQty || 0);
+        const maxQty = rule.maxQty === null || rule.maxQty === undefined || rule.maxQty === "" ? null : Number(rule.maxQty);
+        return safeQty >= minQty && (maxQty === null || safeQty <= maxQty);
+      })
+      .sort((a, b) => Number(b.minQty || 0) - Number(a.minQty || 0));
+
+    if (matched.length > 0) {
+      const chosen = matched[0];
+      const rangeLabel = chosen.maxQty == null ? `${chosen.minQty}+` : `${chosen.minQty}-${chosen.maxQty}`;
+      return {
+        unitPrice: Number(chosen.unitPrice ?? basePrice),
+        label: rangeLabel,
+      };
+    }
+
+    return { unitPrice: basePrice, label: null };
+  };
+
+  const getPriceForProductQty = (product, qty) => getActiveRangeInfo(product, qty).unitPrice;
+
+  const getCartPriceForQty = (productId, qty) => {
+    const product = allProducts.find((p) => String(p._id) === String(productId));
+    return getPriceForProductQty(product, qty);
+  };
+
   const filteredProducts = useMemo(() => {
     if (!productSearch.trim()) return allProducts.slice(0, 30);
     const q = productSearch.toLowerCase();
@@ -3440,6 +3502,22 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
   const displayedProducts = filteredProducts;
 
   useEffect(() => { productItemRefs.current = []; }, [displayedProducts]);
+  useEffect(() => {
+    if (!showProductPanel || highlightedProductIndex < 0) return;
+    if (highlightedProductIndex >= displayedProducts.length) {
+      setHighlightedProductIndex(displayedProducts.length - 1);
+    }
+  }, [displayedProducts, showProductPanel, highlightedProductIndex]);
+
+  const focusProductIndex = (index) => {
+    if (!displayedProducts.length) return;
+    const nextIndex = Math.min(Math.max(index, 0), displayedProducts.length - 1);
+    setHighlightedProductIndex(nextIndex);
+    setTimeout(() => {
+      const nextItem = productItemRefs.current[nextIndex];
+      if (nextItem) nextItem.focus();
+    }, 0);
+  };
 
   const selectUser = (u) => {
     setSelectedUser(u);
@@ -3460,11 +3538,13 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
     const existsIdx = cartItems.findIndex((it) => it.productId === product._id);
     if (existsIdx !== -1) {
       setCartItems((prev) => {
-        const newArr = prev.map((it, i) => (i === existsIdx ? { ...it, quantity: it.quantity + 1 } : it));
+        const nextQty = prev[existsIdx].quantity + 1;
+        const newArr = prev.map((it, i) => (i === existsIdx ? { ...it, quantity: nextQty, unitPrice: getCartPriceForQty(it.productId, nextQty) } : it));
         setTimeout(() => { if (qtyRefs.current[existsIdx]) { qtyRefs.current[existsIdx].focus(); qtyRefs.current[existsIdx].select(); } }, 50);
         return newArr;
       });
     } else {
+      const qty = 1;
       setCartItems((prev) => {
         const newIdx = prev.length;
         const newArr = [
@@ -3473,13 +3553,13 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
             productId:    product._id,
             name:         product.name,
             image:        product.image || "",
-            unitPrice:    product.salePrice,
-            quantity:     1,
+            unitPrice:    getPriceForProductQty(product, qty),
+            quantity:     qty,
             ownerType:    product.ownerType    || "admin",
             productModel: product.productModel || "Price",
           },
         ];
-        setTimeout(() => { if (priceRefs.current[newIdx]) { priceRefs.current[newIdx].focus(); priceRefs.current[newIdx].select(); } }, 50);
+        setTimeout(() => { if (qtyRefs.current[newIdx]) { qtyRefs.current[newIdx].focus(); qtyRefs.current[newIdx].select(); } }, 50);
         return newArr;
       });
     }
@@ -3490,18 +3570,23 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
   const removeItem = (idx) => setCartItems((prev) => prev.filter((_, i) => i !== idx));
 
   const changeQty = (idx, delta) => {
-    setCartItems((prev) => prev.map((it, i) => (i === idx ? { ...it, quantity: Math.max(1, it.quantity + delta) } : it)));
+    setCartItems((prev) => prev.map((it, i) => {
+      if (i !== idx) return it;
+      const nextQty = Math.max(1, it.quantity + delta);
+      return { ...it, quantity: nextQty, unitPrice: getCartPriceForQty(it.productId, nextQty) };
+    }));
   };
 
   const setQty = (idx, value) => {
     if (value === "") {
-      setCartItems((prev) => prev.map((it, i) => (i === idx ? { ...it, quantity: 0 } : it)));
+      setCartItems((prev) => prev.map((it, i) => (i === idx ? { ...it, quantity: 0, unitPrice: 0 } : it)));
       return;
     }
 
     const qty = Number(value);
     if (Number.isNaN(qty)) return;
-    setCartItems((prev) => prev.map((it, i) => (i === idx ? { ...it, quantity: Math.max(1, qty) } : it)));
+    const nextQty = Math.max(1, qty);
+    setCartItems((prev) => prev.map((it, i) => (i === idx ? { ...it, quantity: nextQty, unitPrice: getCartPriceForQty(it.productId, nextQty) } : it)));
   };
 
   const changePrice = (idx, value) => {
@@ -3845,10 +3930,22 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                 onKeyDown={(e) => {
                   if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    // focus first item after panel renders
-                    setTimeout(() => { if (productItemRefs.current && productItemRefs.current[0]) productItemRefs.current[0].focus(); }, 0);
-                  }
-                  if (e.key === 'Escape') {
+                    if (!showProductPanel) setShowProductPanel(true);
+                    if (displayedProducts.length > 0) {
+                      focusProductIndex(0);
+                    }
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (!showProductPanel) setShowProductPanel(true);
+                    if (displayedProducts.length > 0) {
+                      focusProductIndex(displayedProducts.length - 1);
+                    }
+                  } else if (e.key === 'Enter') {
+                    if (showProductPanel && highlightedProductIndex >= 0 && displayedProducts[highlightedProductIndex]) {
+                      e.preventDefault();
+                      addProduct(displayedProducts[highlightedProductIndex]);
+                    }
+                  } else if (e.key === 'Escape') {
                     e.preventDefault();
                     productSearchRef.current?.blur();
                     setShowProductPanel(false);
@@ -3880,22 +3977,36 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                           tabIndex={0}
                           role="button"
                           onMouseDown={(e) => e.preventDefault()}
+                          onFocus={() => setHighlightedProductIndex(idx)}
                           onClick={() => addProduct(p)}
                           onKeyDown={(e) => {
                             if (e.key === 'ArrowDown') {
                               e.preventDefault();
-                              const next = productItemRefs.current[idx + 1];
+                              const nextIndex = Math.min(idx + 1, displayedProducts.length - 1);
+                              setHighlightedProductIndex(nextIndex);
+                              const next = productItemRefs.current[nextIndex];
                               if (next) next.focus();
                             } else if (e.key === 'ArrowUp') {
                               e.preventDefault();
-                              if (idx === 0) { productSearchRef.current?.focus(); }
-                              else { const prev = productItemRefs.current[idx - 1]; if (prev) prev.focus(); }
-                            } else if (e.key === 'Enter') {
+                              if (idx === 0) {
+                                setHighlightedProductIndex(-1);
+                                productSearchRef.current?.focus();
+                              } else {
+                                const prevIndex = idx - 1;
+                                setHighlightedProductIndex(prevIndex);
+                                const prev = productItemRefs.current[prevIndex];
+                                if (prev) prev.focus();
+                              }
+                            } else if (e.key === 'Enter' || e.key === ' ') {
                               e.preventDefault();
                               addProduct(p);
+                            } else if (e.key === 'Escape') {
+                              e.preventDefault();
+                              productSearchRef.current?.focus();
+                              setShowProductPanel(false);
                             }
                           }}
-                          className="w-full flex items-center gap-2 p-2 hover:bg-blue-50 transition-all text-left"
+                          className={`w-full flex items-center gap-2 p-2 transition-all text-left ${highlightedProductIndex === idx ? 'bg-blue-50 border border-blue-200' : 'hover:bg-blue-50 border border-transparent'}`}
                         >
                           <div className="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
                             {p.image ? <img src={p.image} alt={p.name} className="w-full h-full object-cover rounded-lg" /> : <Package className="w-3.5 h-3.5 text-gray-300" />}
@@ -3928,46 +4039,35 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                 </div>
               ) : (
                 <>
-                  <div style={{gridTemplateColumns: '48px 1fr 120px 140px 40px'}} className="grid items-center gap-3 px-3 py-2 text-xs text-slate-500 bg-gray-50 border border-gray-200">
+                  <div style={{gridTemplateColumns: '64px 48px minmax(180px, 1fr) 160px 150px 40px'}} className="grid items-center gap-3 px-3 py-2.5 text-sm text-slate-500 bg-gray-50 border border-gray-200">
+                    <div className="text-center font-black">Sr. No.</div>
                     <div className="font-black col-span-1" />
                     <div className="font-black">Product</div>
-                    <div className="text-right font-black">Rate</div>
                     <div className="text-center font-black">Qty</div>
+                    <div className="text-right font-black">Rate</div>
                     <div className="text-center" />
                   </div>
-                  {cartItems.map((it, idx) => (
-                  <div key={`${it.productId}-${idx}`} style={{gridTemplateColumns: '48px 1fr 120px 140px 40px'}} className="grid items-center gap-3 p-2.5 bg-white border border-gray-100">
+                  {cartItems.map((it, idx) => {
+                    const productMeta = allProducts.find((p) => String(p._id) === String(it.productId));
+                    const activeRange = getActiveRangeInfo(productMeta, it.quantity);
+                    return (
+                  <div key={`${it.productId}-${idx}`} style={{gridTemplateColumns: '64px 48px minmax(180px, 1fr) 160px 150px 40px'}} className="grid items-center gap-3 p-3 bg-white border border-gray-100">
+                    <div className="flex items-center justify-center">
+                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 text-sm font-black text-slate-600">{idx + 1}</span>
+                    </div>
                     <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
                       {it.image ? <img src={it.image} alt={it.name} className="w-full h-full object-cover rounded-lg" /> : <Package className="w-4 h-4 text-gray-300" />}
                     </div>
                     <div className="min-w-0">
-                      <div className="text-xs font-bold text-slate-700 truncate">{it.name}</div>
-                    </div>
-                    <div className="flex flex-col items-center justify-center text-center">
-                      <div className="text-[10px] text-slate-400">
-                       
-                      </div>
-                      <div className="mt-1 flex items-center justify-end text-[10px] text-slate-400">
-                        <span className="text-xs font-semibold text-slate-600 mr-2">₹</span>
-                        <input
-                          type="text"
-                          inputMode="decimal"
-                          value={String(it.unitPrice ?? "")}
-                          ref={(el) => (priceRefs.current[idx] = el)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.preventDefault();
-                              if (qtyRefs.current[idx]) { qtyRefs.current[idx].focus(); qtyRefs.current[idx].select(); }
-                            }
-                          }}
-                          onChange={(e) => changePrice(idx, e.target.value)}
-                          className="text-right text-xs font-bold text-slate-800 border border-gray-200 rounded-lg bg-white py-1 px-2"
-                          style={{width: '110px'}}
-                        />
-                      </div>
+                      <div className="text-sm font-bold text-slate-700 truncate">{it.name}</div>
+                      {activeRange.label && (
+                        <div className="text-xs font-bold text-emerald-600 mt-0.5">
+                          Range {activeRange.label} · ₹{activeRange.unitPrice.toFixed(2)}
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center justify-center gap-1">
-                      <button onClick={() => changeQty(idx, -1)} disabled={it.quantity <= 1} className="w-6 h-6 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 disabled:opacity-40 transition-all"><Minus size={10} /></button>
+                      <button onClick={() => changeQty(idx, -1)} disabled={it.quantity <= 1} className="w-8 h-8 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 disabled:opacity-40 transition-all"><Minus size={12} /></button>
                       <input
                         type="text"
                         inputMode="numeric"
@@ -3977,10 +4077,7 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             e.preventDefault();
-                            if (paymentRefs.current[0]) {
-                              paymentRefs.current[0].focus();
-                              paymentRefs.current[0].select();
-                            }
+                            if (priceRefs.current[idx]) { priceRefs.current[idx].focus(); priceRefs.current[idx].select(); }
                           }
                         }}
                         onChange={(e) => setQty(idx, e.target.value)}
@@ -3991,13 +4088,38 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                             paymentRefs.current[0].select();
                           }
                         }}
-                        className="w-16 text-center text-xs font-bold text-slate-800 border border-gray-200 rounded-lg bg-white py-1"
+                        className="w-20 text-center text-sm font-bold text-slate-800 border border-gray-200 rounded-lg bg-white py-2"
                       />
-                      <button onClick={() => changeQty(idx, 1)} className="w-6 h-6 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-all"><Plus size={10} /></button>
+                      <button onClick={() => changeQty(idx, 1)} className="w-8 h-8 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-all"><Plus size={12} /></button>
+                    </div>
+                    <div className="flex items-center justify-end text-sm text-slate-400">
+                      <span className="text-sm font-semibold text-slate-600 mr-2">₹</span>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={String(it.unitPrice ?? "")}
+                        ref={(el) => (priceRefs.current[idx] = el)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            setShowProductPanel(true);
+                            setTimeout(() => {
+                              if (productSearchRef.current) {
+                                productSearchRef.current.focus();
+                                productSearchRef.current.select();
+                              }
+                            }, 50);
+                          }
+                        }}
+                        onChange={(e) => changePrice(idx, e.target.value)}
+                        className="text-right text-sm font-bold text-slate-800 border border-gray-200 rounded-lg bg-white py-2 px-3"
+                        style={{width: '130px'}}
+                      />
                     </div>
                     <button onClick={() => removeItem(idx)} className="w-6 h-6 rounded-lg flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 transition-all"><X size={12} /></button>
                   </div>
-                ))}
+                    );
+                })}
                   </>
               )}
             </div>
@@ -4005,7 +4127,7 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
 
           {/* ── Coupon + Payment Section ── */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gray-50 rounded-xl border border-gray-100 p-3.5">
+            <div className="bg-gray-50 rounded-xl border border-gray-100 p-4">
               {/* <span className="text-xs font-black text-slate-700 uppercase tracking-wide flex items-center gap-1.5 mb-2">
                 <Tag size={13} /> Coupon <span className="text-slate-400 font-normal normal-case">(optional)</span>
               </span> */}
@@ -4016,15 +4138,15 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
               /> */}
             {/* </div> */}
             {/* <div className="bg-gray-50 rounded-xl border border-gray-100 p-3.5"> */}
-              <span className="text-xs font-black text-slate-700 uppercase tracking-wide flex items-center gap-1.5 mb-3">
-              <Wallet size={13} /> Payments
+              <span className="text-sm font-black text-slate-700 uppercase tracking-wide flex items-center gap-2 mb-4">
+              <Wallet size={16} /> Payments
             </span>
             <div className="space-y-3">
               {['cash', 'online', 'credit'].map((mode, index) => (
-                <div key={mode} className="grid grid-cols-[100px_minmax(0,1fr)] gap-3 items-center">
-                  <div className="text-[11px] font-semibold uppercase text-slate-600">{mode}</div>
+                <div key={mode} className="grid grid-cols-[110px_minmax(0,1fr)] gap-3 items-center">
+                  <div className="text-sm font-semibold uppercase text-slate-600">{mode}</div>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">₹</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base font-bold">₹</span>
                     <input
                       type="text"
                       inputMode="decimal"
@@ -4041,13 +4163,13 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                         }
                       }}
                       onChange={(e) => setPayments((prev) => ({ ...prev, [mode]: e.target.value }))}
-                      className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-xl text-xs bg-white"
+                      className="w-full pl-8 pr-3 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="0"
                     />
                   </div>
                 </div>
               ))}
-              <div className="text-xs text-slate-500">Remaining: ₹{(total - ['cash', 'online', 'credit'].reduce((s, mode) => s + (Number(payments[mode]) || 0), 0)).toFixed(2)}</div>
+              <div className="text-sm font-medium text-slate-500">Remaining: ₹{(total - ['cash', 'online', 'credit'].reduce((s, mode) => s + (Number(payments[mode]) || 0), 0)).toFixed(2)}</div>
             </div>
             </div>
           </div>

@@ -10,7 +10,7 @@
 // //   const submit = async (e) => {
 // //     e.preventDefault();
 // //     try {
-// //       const res = await axios.post('https://deploy-foodhelper.onrender.com/api/admin/login', { email, password });
+// //       const res = await axios.post('http://localhost:7000/api/admin/login', { email, password });
 // //       // backend returns { token, role, name } per the admin-only backend spec
 // //       if (!res.data || !res.data.token) {
 // //         alert('Login failed: Invalid response from server');
@@ -81,7 +81,7 @@
 //   const submit = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("https://deploy-foodhelper.onrender.com/api/admin/login", {
+//       const res = await axios.post("http://localhost:7000/api/admin/login", {
 //         email,
 //         password,
 //       });
@@ -165,7 +165,7 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://deploy-foodhelper.onrender.com/api/admin/login", {
+      const res = await axios.post("http://localhost:7000/api/admin/login", {
         email,
         password,
       });

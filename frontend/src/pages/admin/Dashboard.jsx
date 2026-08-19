@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Legend, Filler);
 
-const API = "https://deploy-foodhelper.onrender.com/api";
+const API = "http://localhost:7000/api";
 
 export default function ProfessionalDashboard() {
   const [dashboardData, setDashboardData] = useState({

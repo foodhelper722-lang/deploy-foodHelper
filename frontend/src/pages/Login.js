@@ -17,7 +17,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("https://deploy-foodhelper.onrender.com/api/admin/login", {
+      const res = await axios.post("http://localhost:7000/api/admin/login", {
         email,
         password,
       });

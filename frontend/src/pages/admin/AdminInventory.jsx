@@ -5,7 +5,7 @@ import {
   Package, ShieldAlert, CheckCircle2, Download, Pencil, ChevronDown, ChevronUp,
 } from "lucide-react";
 
-const API = "https://deploy-foodhelper.onrender.com/api/inventory";
+const API = "http://localhost:7000/api/inventory";
 
 const newRow = () => ({
   id:         Date.now() + Math.random(),
@@ -202,7 +202,7 @@ export default function AdminInventory() {
   const loadProducts = useCallback(async () => {
     setProdLoading(true);
     try {
-      const res  = await axios.get("https://deploy-foodhelper.onrender.com/api/prices");
+      const res  = await axios.get("http://localhost:7000/api/prices");
       const list = [];
       (res.data.data || []).forEach((cat) =>
         (cat.subcategories || []).forEach((sub) => {

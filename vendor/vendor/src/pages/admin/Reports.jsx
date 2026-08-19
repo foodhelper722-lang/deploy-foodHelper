@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Reports.css";
 
-const API = "https://deploy-foodhelper.onrender.com/api/reports";
+const API = "http://localhost:7000/api/reports";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);

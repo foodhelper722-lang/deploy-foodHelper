@@ -15,10 +15,15 @@ exports.checkout = async (req, res) => {
     const discount = await DiscountRule.findOne({
       product: product._id,
       minQty: { $lte: c.qty },
-      maxQty: { $gte: c.qty },
-    });
+      $or: [
+        { maxQty: null },
+        { maxQty: { $gte: c.qty } },
+        { maxQty: undefined },
+      ],
+    }).sort({ minQty: -1 });
 
-    const bill = calculateBill(product.salePrice, c.qty, gst, discount);
+    const unitPrice = discount?.unitPrice ?? product.salePrice;
+    const bill = calculateBill(unitPrice, c.qty, gst, null);
 
     total += bill.final;
 

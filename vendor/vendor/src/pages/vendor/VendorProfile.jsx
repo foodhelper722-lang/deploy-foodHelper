@@ -1,7 +1,7 @@
 // import React, { useState } from "react";
 // import axios from "axios";
 
-// const API_URL = "https://deploy-foodhelper.onrender.com/api/vendor/profile/change-password";
+// const API_URL = "http://localhost:7000/api/vendor/profile/change-password";
 
 // const axiosAuth = axios.create();
 // axiosAuth.interceptors.request.use((config) => {
@@ -420,8 +420,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const PROFILE_API  = "https://deploy-foodhelper.onrender.com/api/vendor/profile";
-const PASSWORD_API = "https://deploy-foodhelper.onrender.com/api/vendor/profile/change-password";
+const PROFILE_API  = "http://localhost:7000/api/vendor/profile";
+const PASSWORD_API = "http://localhost:7000/api/vendor/profile/change-password";
 
 const axiosAuth = axios.create();
 axiosAuth.interceptors.request.use((config) => {

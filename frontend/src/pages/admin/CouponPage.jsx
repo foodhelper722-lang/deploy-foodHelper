@@ -1,7 +1,7 @@
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
 
-// const API = "https://deploy-foodhelper.onrender.com/api/coupons";
+// const API = "http://localhost:7000/api/coupons";
 
 // const AdminCouponPage = () => {
 //   const [coupons, setCoupons] = useState([]);
@@ -184,7 +184,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
-const API = "https://deploy-foodhelper.onrender.com/api/coupons";
+const API = "http://localhost:7000/api/coupons";
 
 const EMPTY_FORM = {
   headline: "",

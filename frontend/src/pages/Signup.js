@@ -11,7 +11,7 @@
 //   const submit = async (e) => {
 //     e.preventDefault();
 //     try {
-//       await axios.post('https://deploy-foodhelper.onrender.com/api/admin/register', { name, email, password });
+//       await axios.post('http://localhost:7000/api/admin/register', { name, email, password });
 //       alert('Admin registered successfully. Please login.');
 //       navigate('/login');
 //     } catch (err) {
@@ -79,7 +79,7 @@ export default function Signup() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://deploy-foodhelper.onrender.com/api/admin/register", {
+      await axios.post("http://localhost:7000/api/admin/register", {
         name,
         email,
         password,

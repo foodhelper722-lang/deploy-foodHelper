@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
-const API = "https://deploy-foodhelper.onrender.com/api/banners";
+const API = "http://localhost:7000/api/banners";
 
 export default function BannerManager() {
   const [banners, setBanners] = useState([]);

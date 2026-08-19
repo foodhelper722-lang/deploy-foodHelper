@@ -14,7 +14,7 @@
 //   XCircle,
 // } from "lucide-react";
 
-// const API = "https://deploy-foodhelper.onrender.com/api/user/vendor/all";
+// const API = "http://localhost:7000/api/user/vendor/all";
 
 // /* ─────────────────────────────────────────
 //    Helpers
@@ -526,7 +526,7 @@ import {
   XCircle,
 } from "lucide-react";
 
-const API = "https://deploy-foodhelper.onrender.com/api/user/vendor/all";
+const API = "http://localhost:7000/api/user/vendor/all";
 
 /* ─────────────────────────────────────────
    Helpers

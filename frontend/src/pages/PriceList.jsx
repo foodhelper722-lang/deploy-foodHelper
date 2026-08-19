@@ -10,9 +10,9 @@
 //   Package, Box, Pencil, Scale,
 // } from "lucide-react";
 
-// const API_URL       = "https://deploy-foodhelper.onrender.com/api/prices";
-// const CATEGORY_URL  = "https://deploy-foodhelper.onrender.com/api/categories";
-// const DISCOUNT_URL  = "https://deploy-foodhelper.onrender.com/api/discount";
+// const API_URL       = "http://localhost:7000/api/prices";
+// const CATEGORY_URL  = "http://localhost:7000/api/categories";
+// const DISCOUNT_URL  = "http://localhost:7000/api/discount";
 
 // const GST_BADGE = {
 //   0:  { bg: "bg-emerald-100", text: "text-emerald-700", dot: "bg-emerald-500" },
@@ -2722,9 +2722,9 @@ import {
   Package, Box, Pencil, Scale, ShoppingTag,
 } from "lucide-react";
 
-const API_URL       = "https://deploy-foodhelper.onrender.com/api/prices";
-const CATEGORY_URL  = "https://deploy-foodhelper.onrender.com/api/categories";
-const DISCOUNT_URL  = "https://deploy-foodhelper.onrender.com/api/discount";
+const API_URL       = "http://localhost:7000/api/prices";
+const CATEGORY_URL  = "http://localhost:7000/api/categories";
+const DISCOUNT_URL  = "http://localhost:7000/api/discount";
 
 const GST_BADGE = {
   0:  { bg: "bg-emerald-100", text: "text-emerald-700", dot: "bg-emerald-500" },

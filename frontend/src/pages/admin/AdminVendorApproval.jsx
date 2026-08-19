@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
-const API = "https://deploy-foodhelper.onrender.com/api/admin";
+const API = "http://localhost:7000/api/admin";
 
 const AVATAR_COLORS = [
   { bg: "#E6F1FB", color: "#0C447C" },

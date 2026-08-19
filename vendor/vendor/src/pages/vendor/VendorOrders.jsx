@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo, useRef, useCallback } from "react"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "https://deploy-foodhelper.onrender.com/api/vendor/orders";
+const API_URL = "http://localhost:7000/api/vendor/orders";
 
 /* ── Axios with vendor token ── */
 const axiosAuth = axios.create();
