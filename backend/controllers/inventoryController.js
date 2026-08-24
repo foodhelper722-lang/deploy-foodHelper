@@ -12,7 +12,7 @@ const toNum = (v, fallback = 0) => {
 ════════════════════════════════════════ */
 exports.createInventory = async (req, res) => {
   try {
-    const { product, stock, minStock, expiryDate } = req.body;
+    const { product, stock, minStock, expiryDate, note } = req.body;
     if (!product) return res.status(400).json({ success: false, message: "Product required" });
 
     const exists = await Inventory.findOne({ product });
@@ -28,7 +28,7 @@ exports.createInventory = async (req, res) => {
     });
 
     if (stockNum > 0) {
-      await InventoryLedger.create({ product, type: "INWARD", qty: stockNum, note: "Opening stock" });
+      await InventoryLedger.create({ product, type: "INWARD", qty: stockNum, note: note || "Opening stock" });
     }
 
     const populated = await Inventory.findById(inv._id).populate("product", "name image");
@@ -93,7 +93,7 @@ exports.updateInventory = async (req, res) => {
     const inv = await Inventory.findById(req.params.id);
     if (!inv) return res.status(404).json({ success: false, message: "Not found" });
 
-    const { stock, minStock, expiryDate } = req.body;
+    const { stock, minStock, expiryDate, note } = req.body;
     const newStock = stock !== undefined ? toNum(stock) : inv.stock;
     const diff     = newStock - inv.stock;
 
@@ -107,7 +107,7 @@ exports.updateInventory = async (req, res) => {
         product: inv.product,
         qty:     Math.abs(diff),
         type:    diff > 0 ? "INWARD" : "OUTWARD",
-        note:    "Manual stock adjustment",
+        note:    note || "Manual stock adjustment",
       });
     }
 

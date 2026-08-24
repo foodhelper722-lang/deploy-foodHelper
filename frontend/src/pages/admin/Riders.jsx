@@ -5,7 +5,7 @@ import {
   Bike, CheckCircle, Smartphone, Loader2 
 } from "lucide-react";
 
-const API = "http://localhost:7000/api/riders";
+const API = "https://deploy-foodhelper.onrender.com/api/riders";
 
 export default function Riders() {
   const empty = {

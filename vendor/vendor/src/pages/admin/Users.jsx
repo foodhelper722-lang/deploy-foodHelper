@@ -3,7 +3,7 @@
 // import axios from "axios";
 // import "./Users.css";
 
-// const API = "http://localhost:7000/api/user";
+// const API = "https://deploy-foodhelper.onrender.com/api/user";
 
 // export default function Users() {
 //   const [users, setUsers] = useState([]);
@@ -198,7 +198,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Users.css";
 
-const API = "http://localhost:7000/api/user/all";
+const API = "https://deploy-foodhelper.onrender.com/api/user/all";
 
 export default function Users() {
   const [users, setUsers] = useState([]);

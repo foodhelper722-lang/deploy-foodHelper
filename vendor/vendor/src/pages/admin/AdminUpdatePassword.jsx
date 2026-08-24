@@ -36,7 +36,7 @@ export default function AdminUpdatePassword() {
       const token = localStorage.getItem("token");
 
       await axios.put(
-        "http://localhost:7000/api/admin/update-password",
+        "https://deploy-foodhelper.onrender.com/api/admin/update-password",
         {
           oldPassword,
           newPassword,

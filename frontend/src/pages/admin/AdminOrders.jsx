@@ -9,9 +9,9 @@
 // //   Store, Eye, Users, Calendar,
 // // } from "lucide-react";
 
-// // const ORDER_API   = "http://localhost:7000/api/orders";
-// // const RIDER_API   = "http://localhost:7000/api/riders";
-// // const PRODUCT_API = "http://localhost:7000/api/categories/with-products";
+// // const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
+// // const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
+// // const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/categories/with-products";
 
 // // const FALLBACK_POLL_INTERVAL = 30_000;
 
@@ -1891,19 +1891,19 @@ import {
   Store, Eye, Users, Calendar, Trash2, PlusCircle,
 } from "lucide-react";
 
-// const ORDER_API   = "http://localhost:7000/api/orders";
-// const RIDER_API   = "http://localhost:7000/api/riders";
-// const PRODUCT_API = "http://localhost:7000/api/public/products";
-// const USER_API    = "http://localhost:7000/api/user/all";
+// const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
+// const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
+// const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/public/products";
+// const USER_API    = "https://deploy-foodhelper.onrender.com/api/user/all";
 
 
 
 
-const ORDER_API   = "http://localhost:7000/api/orders";
-const RIDER_API   = "http://localhost:7000/api/riders";
-const PRODUCT_API = "http://localhost:7000/api/public/products";
-const USER_API    = "http://localhost:7000/api/user/all";
-const CREATE_CUSTOMER_API = "http://localhost:7000/api/user/admin/create-customer";
+const ORDER_API   = "https://deploy-foodhelper.onrender.com/api/orders";
+const RIDER_API   = "https://deploy-foodhelper.onrender.com/api/riders";
+const PRODUCT_API = "https://deploy-foodhelper.onrender.com/api/public/products";
+const USER_API    = "https://deploy-foodhelper.onrender.com/api/user/all";
+const CREATE_CUSTOMER_API = "https://deploy-foodhelper.onrender.com/api/user/admin/create-customer";
 
 const FALLBACK_POLL_INTERVAL = 30_000;
 
@@ -1989,7 +1989,7 @@ const mapPublicProduct = (p) => ({
 });
 
 // ─── Fetch ALL products from the public products API (handles pagination) ────
-// GET http://localhost:7000/api/public/products?page=1&limit=100
+// GET https://deploy-foodhelper.onrender.com/api/public/products?page=1&limit=100
 const fetchAllPublicProducts = async () => {
   const limit = 100;
   let page = 1;
@@ -3386,7 +3386,7 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
   useEffect(() => {
     const loadDiscountRules = async () => {
       try {
-        const res = await axios.get("http://localhost:7000/api/discount/all");
+        const res = await axios.get("https://deploy-foodhelper.onrender.com/api/discount/all");
         setDiscountRules(res.data?.data || res.data || []);
       } catch (err) {
         console.warn("Failed to load discount rules:", err);

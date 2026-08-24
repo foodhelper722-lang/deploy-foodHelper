@@ -5,7 +5,7 @@ import {
   Package, ShieldAlert, CheckCircle2, Download, Pencil, ChevronDown, ChevronUp,
 } from "lucide-react";
 
-const API = "http://localhost:7000/api/inventory";
+const API = "https://deploy-foodhelper.onrender.com/api/inventory";
 
 const newRow = () => ({
   id:         Date.now() + Math.random(),
@@ -58,12 +58,11 @@ const ProductSelect = ({ value, onChange, products, loading, alreadyTracked = []
     <option value="">{loading ? "Loading..." : products.length === 0 ? "No products" : "Select product..."}</option>
     {products.map((p) => {
       const sid        = String(p._id);
-      const isTracked  = alreadyTracked.includes(sid);
       const isDupRow   = otherSelected.includes(sid);
-      const isDisabled = (isTracked || isDupRow) && sid !== String(value);
+      const isDisabled = isDupRow && sid !== String(value);
       return (
         <option key={p._id} value={p._id} disabled={isDisabled}>
-          {p.name}{isTracked ? " ✓" : ""}
+          {p.name}{alreadyTracked.includes(sid) ? " ✓" : ""}
         </option>
       );
     })}
@@ -202,7 +201,7 @@ export default function AdminInventory() {
   const loadProducts = useCallback(async () => {
     setProdLoading(true);
     try {
-      const res  = await axios.get("http://localhost:7000/api/prices");
+      const res  = await axios.get("https://deploy-foodhelper.onrender.com/api/prices");
       const list = [];
       (res.data.data || []).forEach((cat) =>
         (cat.subcategories || []).forEach((sub) => {
@@ -339,25 +338,14 @@ export default function AdminInventory() {
     try {
       const payload = {
         items: valid.map((r) => {
-          const hasBatch = r.batchNo || r.mfgDate || r.expiryDate || r.qty;
+          const current = inventory.find((i) => String(i.product?._id) === String(r.product));
+          const quantity = Number(r.qty || r.stock) || 0;
           return {
-            product:  r.product,
-            minStock: Number(r.minStock) || 0,
-            note:     batchName.trim() || "Opening stock",
-            // Batch mode
-            ...(hasBatch
-              ? {
-                  batches: [{
-                    batchNo:    r.batchNo    || "",
-                    mfgDate:    r.mfgDate    || undefined,
-                    expiryDate: r.expiryDate || undefined,
-                    qty:        Number(r.qty) || Number(r.stock) || 0,
-                  }],
-                }
-              : {
-                  // Legacy mode — sirf stock
-                  stock: Number(r.stock) || 0,
-                }),
+            product:    r.product,
+            stock:      (Number(current?.stock) || 0) + quantity,
+            minStock:   Number(r.minStock) || Number(current?.minStock) || 0,
+            expiryDate: r.expiryDate || undefined,
+            note:       batchName.trim() || "Opening stock",
           };
         }),
       };

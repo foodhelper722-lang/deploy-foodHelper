@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Stores.css";
 
-const API = "http://localhost:7000/api/stores";
+const API = "https://deploy-foodhelper.onrender.com/api/stores";
 
 export default function Stores() {
   const emptyForm = {

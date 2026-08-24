@@ -10,9 +10,9 @@
 //   Package, Box, Pencil, Scale,
 // } from "lucide-react";
 
-// const API_URL       = "http://localhost:7000/api/prices";
-// const CATEGORY_URL  = "http://localhost:7000/api/categories";
-// const DISCOUNT_URL  = "http://localhost:7000/api/discount";
+// const API_URL       = "https://deploy-foodhelper.onrender.com/api/prices";
+// const CATEGORY_URL  = "https://deploy-foodhelper.onrender.com/api/categories";
+// const DISCOUNT_URL  = "https://deploy-foodhelper.onrender.com/api/discount";
 
 // const GST_BADGE = {
 //   0:  { bg: "bg-emerald-100", text: "text-emerald-700", dot: "bg-emerald-500" },
@@ -2722,9 +2722,9 @@ import {
   Package, Box, Pencil, Scale, ShoppingTag,
 } from "lucide-react";
 
-const API_URL       = "http://localhost:7000/api/prices";
-const CATEGORY_URL  = "http://localhost:7000/api/categories";
-const DISCOUNT_URL  = "http://localhost:7000/api/discount";
+const API_URL       = "https://deploy-foodhelper.onrender.com/api/prices";
+const CATEGORY_URL  = "https://deploy-foodhelper.onrender.com/api/categories";
+const DISCOUNT_URL  = "https://deploy-foodhelper.onrender.com/api/discount";
 
 const GST_BADGE = {
   0:  { bg: "bg-emerald-100", text: "text-emerald-700", dot: "bg-emerald-500" },
@@ -4440,6 +4440,11 @@ export default function PriceList() {
   const [showProductUnitDefs,setShowProductUnitDefs]= useState(false);
   const [search,             setSearch]             = useState("");
   const [loading,            setLoading]            = useState(false);
+  const [inventory,          setInventory]          = useState({});
+  const [inventoryLoading,   setInventoryLoading]   = useState(true);
+  const [stockProduct,       setStockProduct]       = useState(null);
+  const [stockForm,          setStockForm]          = useState({ quantity: "", minStock: "", expiryDate: "", note: "" });
+  const [stockSaving,        setStockSaving]        = useState(false);
   const [isSubmitting,       setIsSubmitting]       = useState(false);
   const [form,               setForm]               = useState(EMPTY_FORM);
   const [activeMenu,         setActiveMenu]         = useState(null);
@@ -4483,7 +4488,7 @@ export default function PriceList() {
     return () => clearTimeout(t);
   }, [alertBox.show]);
 
-  useEffect(() => { fetchHsnList(); fetchBrands(); }, []);
+  useEffect(() => { fetchHsnList(); fetchBrands(); fetchInventory(); }, []);
   useEffect(() => { fetchCategories(); }, []);
   useEffect(() => { if (categories.length > 0) fetchItems(); }, [categories]);
 
@@ -4587,6 +4592,79 @@ export default function PriceList() {
       const res = await axios.get(CATEGORY_URL);
       if (res.data?.success) setCategories(res.data.categories || []);
     } catch { showAlert("Could not fetch categories", "error"); }
+  };
+
+  const fetchInventory = async () => {
+    try {
+      setInventoryLoading(true);
+      const res = await axios.get("https://deploy-foodhelper.onrender.com/api/inventory");
+      const stockByProduct = {};
+      (res.data?.data || []).forEach((entry) => {
+        const productId = entry.product?._id || entry.product;
+        if (productId) stockByProduct[productId] = entry;
+      });
+      setInventory(stockByProduct);
+    } catch {
+      setInventory({});
+    } finally {
+      setInventoryLoading(false);
+    }
+  };
+
+  const openStockModal = (item) => {
+    const currentInventory = inventory[item._id];
+    setStockProduct(item);
+    setStockForm({
+      quantity: "",
+      minStock: currentInventory?.minStock ?? "",
+      expiryDate: currentInventory?.expiryDate ? currentInventory.expiryDate.slice(0, 10) : "",
+      note: "",
+    });
+    setActiveMenu(null);
+  };
+
+  const closeStockModal = () => {
+    setStockProduct(null);
+    setStockForm({ quantity: "", minStock: "", expiryDate: "", note: "" });
+  };
+
+  const saveStock = async (e) => {
+    e.preventDefault();
+    const quantity = Number(stockForm.quantity);
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+      showAlert("Enter a quantity greater than 0", "warning");
+      return;
+    }
+
+    const currentInventory = inventory[stockProduct._id];
+    const payload = {
+      stock: (Number(currentInventory?.stock) || 0) + quantity,
+      minStock: Number(stockForm.minStock) || 0,
+      expiryDate: stockForm.expiryDate || undefined,
+      note: stockForm.note.trim() || undefined,
+    };
+
+    try {
+      setStockSaving(true);
+      if (currentInventory?._id) {
+        await axios.put(`https://deploy-foodhelper.onrender.com/api/inventory/${currentInventory._id}`, payload);
+      } else {
+        await axios.post("https://deploy-foodhelper.onrender.com/api/inventory", {
+          product: stockProduct._id,
+          stock: quantity,
+          minStock: payload.minStock,
+          expiryDate: payload.expiryDate,
+          note: payload.note,
+        });
+      }
+      closeStockModal();
+      await fetchInventory();
+      showAlert("Stock added successfully", "success");
+    } catch (err) {
+      showAlert(err.response?.data?.message || "Could not add stock", "error");
+    } finally {
+      setStockSaving(false);
+    }
   };
 
   const fetchItems = async () => {
@@ -5227,6 +5305,7 @@ export default function PriceList() {
                     </th>
                     <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase">Product</th>
                     {columnVisibility.category && <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>}
+                    <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase">Stock</th>
                     <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase">Base Price</th>
                     <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase">Sale Price</th>
                     {/* ✅ MRP column header */}
@@ -5271,6 +5350,15 @@ export default function PriceList() {
                             {item.subcategory?.name && <div className="text-xs text-gray-500 mt-0.5">-- {item.subcategory.name}</div>}
                           </td>
                         )}
+                        <td className="py-3 px-4">
+                          {inventoryLoading ? (
+                            <span className="text-xs text-gray-400">—</span>
+                          ) : (
+                            <span className={`text-sm font-bold ${(Number(inventory[item._id]?.stock) || 0) > 0 ? "text-gray-800" : "text-red-500"}`}>
+                              {Number(inventory[item._id]?.stock) || 0}
+                            </span>
+                          )}
+                        </td>
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs text-gray-400">Rs.</span>
@@ -5356,6 +5444,10 @@ export default function PriceList() {
                                   className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
                                   <Copy className="w-3.5 h-3.5 text-purple-500" />Duplicate
                                 </button>
+                                <button onClick={() => openStockModal(item)}
+                                  className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
+                                  <Package className="w-3.5 h-3.5 text-green-500" />Add Stock
+                                </button>
                                 <div className="border-t border-gray-100" />
                                 <button onClick={() => { handleDelete(item._id); setActiveMenu(null); }}
                                   className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">
@@ -5406,6 +5498,62 @@ export default function PriceList() {
           </>
         )}
       </div>
+
+      {/* Add Stock Modal */}
+      {stockProduct && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[9999]" onClick={closeStockModal}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+              <div>
+                <h2 className="font-bold text-gray-900 text-lg">Add Stock</h2>
+                <p className="text-sm text-gray-500 mt-0.5">{stockProduct.name}</p>
+              </div>
+              <button type="button" onClick={closeStockModal} className="p-2 hover:bg-gray-100 rounded-lg text-gray-400">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={saveStock} className="p-6">
+              <div className="mb-4 rounded-xl bg-gray-50 border border-gray-100 px-4 py-3">
+                <span className="text-xs text-gray-500">Current stock</span>
+                <div className="text-xl font-bold text-gray-900 mt-0.5">{Number(inventory[stockProduct._id]?.stock) || 0}</div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label required>Quantity to Add</Label>
+                  <Input type="number" min="1" value={stockForm.quantity}
+                    onChange={(e) => setStockForm((p) => ({ ...p, quantity: e.target.value }))}
+                    placeholder="e.g. 20" autoFocus />
+                </div>
+                <div>
+                  <Label>Min Stock</Label>
+                  <Input type="number" min="0" value={stockForm.minStock}
+                    onChange={(e) => setStockForm((p) => ({ ...p, minStock: e.target.value }))}
+                    placeholder="e.g. 5" />
+                </div>
+                <div>
+                  <Label>Expiry Date</Label>
+                  <Input type="date" value={stockForm.expiryDate}
+                    onChange={(e) => setStockForm((p) => ({ ...p, expiryDate: e.target.value }))} />
+                </div>
+                <div>
+                  <Label>Note</Label>
+                  <Input type="text" value={stockForm.note}
+                    onChange={(e) => setStockForm((p) => ({ ...p, note: e.target.value }))}
+                    placeholder="e.g. Supplier A" />
+                </div>
+              </div>
+              <div className="flex gap-3 mt-6 pt-4 border-t border-gray-100">
+                <button type="submit" disabled={stockSaving}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm font-medium disabled:opacity-70">
+                  {stockSaving ? <><Loader2 className="w-4 h-4 animate-spin" />Saving...</> : <><Package className="w-4 h-4" />Add Stock</>}
+                </button>
+                <button type="button" onClick={closeStockModal}
+                  className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-xl text-sm">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Edit Modal */}
       {showModal && (
