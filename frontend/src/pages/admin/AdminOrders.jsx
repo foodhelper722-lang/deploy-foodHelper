@@ -2989,6 +2989,11 @@ const EditOrderModal = ({ order, token, onClose, onUpdated }) => {
   const total = cartItems.reduce((s, it) => s + it.unitPrice * it.quantity, 0);
 
   const addProduct = (product) => {
+    const stockBalance = stockByProduct[String(product?._id)] ?? 0;
+    if (stockBalance <= 0) {
+      setError(`${product?.name || "This product"} is out of stock.`);
+      return;
+    }
     setError("");
     const existsIdx = cartItems.findIndex((it) => it.productId === product._id);
     if (existsIdx !== -1) {
@@ -3342,6 +3347,8 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
   const [cartItems, setCartItems]             = useState([]);
   const [allProducts, setAllProducts]         = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
+  const [stockByProduct, setStockByProduct]   = useState({});
+  const [loadingStock, setLoadingStock]       = useState(false);
   const [productSearch, setProductSearch]     = useState("");
   const [showProductPanel, setShowProductPanel] = useState(false);
   const [highlightedProductIndex, setHighlightedProductIndex] = useState(-1);
@@ -3370,14 +3377,26 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
   useEffect(() => {
     const load = async () => {
       setLoadingProducts(true);
+      setLoadingStock(true);
       try {
-        const products = await fetchAllPublicProducts();
+        const [products, inventoryResponse] = await Promise.all([
+          fetchAllPublicProducts(),
+          axios.get("https://deploy-foodhelper.onrender.com/api/inventory"),
+        ]);
         setAllProducts(products);
+        const stockLookup = {};
+        (inventoryResponse.data?.data || []).forEach((entry) => {
+          const productId = entry.product?._id || entry.product;
+          if (productId) stockLookup[String(productId)] = Number(entry.stock) || 0;
+        });
+        setStockByProduct(stockLookup);
       } catch (err) {
-        console.error("Failed to load products:", err);
+        console.error("Failed to load products or stock:", err);
         setAllProducts([]);
+        setStockByProduct({});
       } finally {
         setLoadingProducts(false);
+        setLoadingStock(false);
       }
     };
     load();
@@ -3610,6 +3629,12 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
     }
     if (cartItems.length === 0) {
       setError("Please add at least one product.");
+      return;
+    }
+
+    const unavailableItem = cartItems.find((item) => (stockByProduct[String(item.productId)] ?? 0) <= 0);
+    if (unavailableItem) {
+      setError(`${unavailableItem.name || "A selected product"} is out of stock. Remove it before creating the order.`);
       return;
     }
 
@@ -3970,6 +3995,8 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                     )}
                     {displayedProducts.map((p, idx) => {
                       const inCart = cartItems.find((c) => c.productId === p._id);
+                      const stockBalance = stockByProduct[String(p._id)] ?? 0;
+                      const isOutOfStock = !loadingStock && stockBalance <= 0;
                       return (
                         <button
                           key={p._id}
@@ -3979,6 +4006,8 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                           onMouseDown={(e) => e.preventDefault()}
                           onFocus={() => setHighlightedProductIndex(idx)}
                           onClick={() => addProduct(p)}
+                          disabled={isOutOfStock}
+                          title={isOutOfStock ? "Out of stock" : "Add product"}
                           onKeyDown={(e) => {
                             if (e.key === 'ArrowDown') {
                               e.preventDefault();
@@ -4006,7 +4035,7 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                               setShowProductPanel(false);
                             }
                           }}
-                          className={`w-full flex items-center gap-2 p-2 transition-all text-left ${highlightedProductIndex === idx ? 'bg-blue-50 border border-blue-200' : 'hover:bg-blue-50 border border-transparent'}`}
+                          className={`w-full flex items-center gap-2 p-2 transition-all text-left ${isOutOfStock ? 'opacity-60 cursor-not-allowed' : highlightedProductIndex === idx ? 'bg-blue-50 border border-blue-200' : 'hover:bg-blue-50 border border-transparent'}`}
                         >
                           <div className="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
                             {p.image ? <img src={p.image} alt={p.name} className="w-full h-full object-cover rounded-lg" /> : <Package className="w-3.5 h-3.5 text-gray-300" />}
@@ -4017,6 +4046,9 @@ const CreateOrderModal = ({ token, onClose, onCreated }) => {
                               {p.category || "General"}{p.subCategory ? ` / ${p.subCategory}` : ""} · ₹{p.salePrice}
                             </div>
                           </div>
+                          <span className={`text-[9px] font-black px-1.5 py-0.5 rounded flex-shrink-0 ${stockBalance > 0 ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-500"}`}>
+                            {loadingStock ? "Stock..." : `Stock: ${stockBalance}`}
+                          </span>
                           <span className={`text-[8px] font-black px-1.5 py-0.5 rounded flex-shrink-0 ${p.ownerType === "vendor" ? "bg-purple-100 text-purple-600" : "bg-slate-100 text-slate-500"}`}>
                             {p.ownerType === "vendor" ? "VENDOR" : "ADMIN"}
                           </span>
