@@ -4585,7 +4585,7 @@ export default function AdminOrders() {
   const getSrNo = (idxInFiltered) => filtered.length - idxInFiltered;
 
   // Whether an order is eligible to show Invoice button
-  const isInvoiceEligible = (order) => INVOICE_ELIGIBLE_STATUSES.includes(order.status?.toLowerCase());
+  const isInvoiceEligible = (order) => order.status?.toLowerCase() !== "cancelled" && order.status?.toLowerCase() !== "canceled";
 
   return (
     <div className="p-4 md:p-6 bg-[#F8FAFC] min-h-screen">

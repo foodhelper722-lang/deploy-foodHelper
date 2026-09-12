@@ -436,19 +436,16 @@ const OrderSchema = new mongoose.Schema(
           .toLowerCase()
           .trim();
 
-        // OLD → NEW
+        // Handle old status names
         if (v === "placed") {
           return "pending";
-        }
-
-        if (v === "confirmed") {
-          return "accepted";
         }
 
         if (v === "canceled") {
           return "cancelled";
         }
 
+        // Allow "confirmed" status to remain as is
         return v;
       },
 
@@ -464,14 +461,11 @@ const OrderSchema = new mongoose.Schema(
           return "pending";
         }
 
-        if (v === "confirmed") {
-          return "accepted";
-        }
-
         if (v === "canceled") {
           return "cancelled";
         }
 
+        // Allow "confirmed" status to remain as is
         return v;
       },
     },

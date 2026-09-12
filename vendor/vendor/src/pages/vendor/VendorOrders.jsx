@@ -56,12 +56,12 @@ const buildInvoiceNo = (invoiceSeqNo, date) => {
 
 
 const buildInvoiceSeqMap = (allOrders) => {
-  const confirmed = allOrders
-    .filter((o) => CONFIRMED_STATUSES.includes(o.status?.toLowerCase()))
+  // Include all orders (not just confirmed) to enable instant invoice generation
+  const sorted = allOrders
     .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
   const map = {};
-  confirmed.forEach((o, idx) => {
+  sorted.forEach((o, idx) => {
     map[o._id] = idx + 1; // 1-based
   });
   return map;
@@ -1158,10 +1158,8 @@ export default function VendorOrders() {
                             <div className="inv-actions">
                               <button
                                 className="btn btn-slate"
-                                onClick={() => isConfirmed && openInvoice(order, sno)}
-                                disabled={!isConfirmed}
-                                title={!isConfirmed ? "Invoice sirf confirmed orders ke liye generate hoti hai" : `Invoice: ${buildInvoiceNo(invoiceSeqNo, order.createdAt)}`}
-                                style={{ opacity: isConfirmed ? 1 : 0.4, cursor: isConfirmed ? "pointer" : "not-allowed" }}
+                                onClick={() => openInvoice(order, sno)}
+                                title={`Invoice: ${buildInvoiceNo(invoiceSeqNo, order.createdAt)}`}
                               >
                                 🧾 Invoice
                               </button>
