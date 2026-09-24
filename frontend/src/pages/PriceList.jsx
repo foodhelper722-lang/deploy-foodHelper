@@ -4454,6 +4454,7 @@ export default function PriceList() {
   const itemsPerPage = 15;
   const [filterCategory,    setFilterCategory]    = useState("");
   const [filterSubcategory, setFilterSubcategory] = useState("");
+  const [filterStatus,      setFilterStatus]      = useState("");
   const [filterSubs,        setFilterSubs]        = useState([]);
   const [quickBasePrices,   setQuickBasePrices]   = useState({});
   const [quickProfitLoss,   setQuickProfitLoss]   = useState({});
@@ -5002,7 +5003,9 @@ export default function PriceList() {
     const t = search.toLowerCase();
     const matchText = (item.name || "").toLowerCase().includes(t) || (item.brand || "").toLowerCase().includes(t) ||
       (item.category?.name || "").toLowerCase().includes(t) || (item.hsnCode || "").toLowerCase().includes(t);
-    return matchText && (!filterCategory || item.category?._id === filterCategory) && (!filterSubcategory || item.subcategory?._id === filterSubcategory);
+    return matchText && (!filterCategory || item.category?._id === filterCategory) &&
+      (!filterSubcategory || item.subcategory?._id === filterSubcategory) &&
+      (!filterStatus || item.status === filterStatus);
   });
 
   let sortedItems = [...filteredItems];
@@ -5128,7 +5131,7 @@ export default function PriceList() {
           </div>
         </div>
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-4 gap-3">
             <div>
               <Label>Filter by Category</Label>
               <SelectInput value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
@@ -5147,6 +5150,14 @@ export default function PriceList() {
               <Label>Sort by Price</Label>
               <SelectInput value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
                 <option value="">Default</option><option value="low">Low to High</option><option value="high">High to Low</option>
+              </SelectInput>
+            </div>
+            <div>
+              <Label>Filter by Status</Label>
+              <SelectInput value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); setCurrentPage(1); }}>
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
               </SelectInput>
             </div>
           </div>

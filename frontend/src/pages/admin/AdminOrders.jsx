@@ -4356,6 +4356,7 @@ export default function AdminOrders() {
   const [orders, setOrders]                     = useState([]);
   const [riders, setRiders]                     = useState([]);
   const [loading, setLoading]                   = useState(true);
+  const [loadError, setLoadError]               = useState("");
   const [filter, setFilter]                     = useState("all");
   const [search, setSearch]                     = useState("");
   const [dateFrom, setDateFrom]                 = useState("");
@@ -4409,15 +4410,30 @@ export default function AdminOrders() {
   }, []);
 
   const fetchInitialOrders = useCallback(async () => {
-    try {
-      const res = await axios.get(ORDER_API, { headers: { Authorization: `Bearer ${tokenRef.current}` } });
-      if (!res.data.success) return;
-      const fetched = res.data.data;
-      knownOrderIds.current = new Set(fetched.map((o) => o._id));
-      isInitialized.current = true;
-      setOrders(fetched);
-    } catch (err) { console.error("[Orders] Initial fetch error:", err); }
-    finally { setLoading(false); }
+    setLoading(true);
+    setLoadError("");
+
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        const authToken = localStorage.getItem("token") || tokenRef.current;
+        const res = await axios.get(ORDER_API, { headers: { Authorization: `Bearer ${authToken}` } });
+        if (!res.data?.success) throw new Error(res.data?.message || "Orders could not be loaded");
+
+        const fetched = Array.isArray(res.data.data) ? res.data.data : [];
+        knownOrderIds.current = new Set(fetched.map((o) => o._id));
+        isInitialized.current = true;
+        setOrders(fetched);
+        setLoadError("");
+        setLoading(false);
+        return;
+      } catch (err) {
+        console.error(`[Orders] Initial fetch attempt ${attempt + 1} failed:`, err);
+        if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 800));
+      }
+    }
+
+    setLoadError("Orders could not be loaded. Please try again.");
+    setLoading(false);
   }, []);
 
   const startFallbackPolling = useCallback(() => {
@@ -4485,13 +4501,17 @@ export default function AdminOrders() {
   const fetchOrders = async () => {
     try {
       setLoading(true);
+      setLoadError("");
       const res = await axios.get(ORDER_API, { headers: { Authorization: `Bearer ${token}` } });
       if (res.data.success) {
         setOrders(res.data.data);
         knownOrderIds.current = new Set(res.data.data.map((o) => o._id));
         isInitialized.current = true;
       }
-    } catch (err) { console.error("fetchOrders error:", err); }
+    } catch (err) {
+      console.error("fetchOrders error:", err);
+      setLoadError("Orders could not be loaded. Please try again.");
+    }
     finally { setLoading(false); }
   };
 
@@ -4684,6 +4704,16 @@ export default function AdminOrders() {
           <div className="flex flex-col items-center justify-center h-64 gap-3 text-blue-600">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
             <p className="font-medium animate-pulse text-sm">Fetching orders...</p>
+          </div>
+        ) : loadError ? (
+          <div className="flex flex-col items-center justify-center h-64 gap-3">
+            <p className="font-medium text-red-500">{loadError}</p>
+            <button
+              onClick={fetchOrders}
+              className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700"
+            >
+              Retry loading orders
+            </button>
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 gap-2">
