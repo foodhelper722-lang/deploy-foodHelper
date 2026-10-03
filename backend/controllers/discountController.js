@@ -7,6 +7,8 @@
 
 
 const DiscountRule = require("../models/DiscountRule");
+const VendorProduct = require("../models/vendorProduct");
+const VendorBulkDiscount = require("../models/VendorBulkDiscount");
 
 /* ======================================================
    CREATE DISCOUNT RULE
@@ -107,7 +109,33 @@ exports.getAllDiscounts = async (req, res) => {
 ====================================================== */
 exports.getDiscountsByProduct = async (req, res) => {
   try {
-    const rules = await DiscountRule.find({ product: req.params.productId })
+    const { productId } = req.params;
+    const vendorProduct = await VendorProduct.findById(productId).select("_id").lean();
+
+    if (vendorProduct) {
+      const discounts = await VendorBulkDiscount.find({
+        product: productId,
+        isActive: true,
+      })
+        .sort({ minQty: 1 })
+        .lean();
+
+      const data = discounts.map((discount) => ({
+        _id: discount._id,
+        product: discount.product,
+        minQty: discount.minQty,
+        maxQty: discount.maxQty,
+        unitPrice: discount.unitPrice,
+      }));
+
+      return res.json({
+        success: true,
+        count: data.length,
+        data,
+      });
+    }
+
+    const rules = await DiscountRule.find({ product: productId })
       .sort({ minQty: 1 });
 
     return res.json({

@@ -11,7 +11,7 @@ export default function BrokersList() {
     phone: "",
     company: "",
     location: "",
-    password: "",
+    password: "", 
   });
   const [editId, setEditId] = useState(null);
 
