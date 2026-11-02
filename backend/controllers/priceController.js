@@ -80,6 +80,41 @@ async function checkAutoLock() {
   }
 }
 
+/* ======================================================
+      PARSE unitDefs (Product Unit Conversions)
+      Accepts string (JSON) or array
+      Item format: { key, label, multiplier, isDefault, order }
+====================================================== */
+function parseUnitDefs(raw) {
+  if (!raw) return [];
+  let arr = raw;
+  if (typeof raw === "string") {
+    try {
+      arr = JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+  if (!Array.isArray(arr)) return [];
+  return arr
+    .filter((u) => u && (u.label || u.key || u.unit))
+    .map((u, idx) => {
+      const label = String(u.label || u.unit || u.key || "").trim();
+      const rawKey = String(u.key || u.unit || label || `u_${idx}`).trim().toLowerCase();
+      const sanitizedKey = rawKey.replace(/[^a-z0-9_-]/g, "_");
+      const multiplier = Math.max(1, Number(u.multiplier || u.nPcs || 1));
+      const isDefault = Boolean(u.isDefault || sanitizedKey === "pcs");
+      const order = Number.isFinite(Number(u.order)) ? Number(u.order) : idx;
+      return {
+        key: sanitizedKey || `unit_${idx}`,
+        label: label || sanitizedKey,
+        multiplier,
+        isDefault,
+        order,
+      };
+    });
+}
+
 
 exports.getPrices = async (req, res) => {
   try {
@@ -127,6 +162,7 @@ exports.getPrices = async (req, res) => {
         _id: p._id,
         name: p.name,
         weight: p.weight || { value: 1, unit: "kg" },
+        unitDefs: p.unitDefs || [],
         basePrice: p.basePrice,
         profitLoss: p.profitLoss,
         mrp: p.mrp || 0,
@@ -209,6 +245,7 @@ exports.getWebsitePrices = async (req, res) => {
         _id: p._id,
         name: p.name,
         weight: p.weight || { value: 1, unit: "kg" },
+        unitDefs: p.unitDefs || [],
         basePrice: p.basePrice,
         profitLoss: p.profitLoss,
         mrp: p.mrp || 0,
@@ -304,12 +341,16 @@ if (req.body.subcategory) {
     const gstAmount = (priceWithoutGst * gst) / 100;
     const sale = priceWithoutGst + gstAmount;
 
+    /* ================= UNIT CONVERSIONS ================= */
+    const unitDefs = parseUnitDefs(req.body.unitDefs);
+
     /* ================= CREATE ================= */
     const created = await Price.create({
       name: req.body.name,
       category: req.body.category,
       subcategory,          // ✅ safe
       weight,               // ✅ safe
+      unitDefs,             // ✅ unit conversions saved
       basePrice: base,
       profitLoss: pl,
       salePrice: sale,
@@ -452,6 +493,11 @@ if (req.body.weight) {
     item.salePrice = priceWithoutGst + gstAmount;
     item.brokerDisplay = item.salePrice - item.lockedPrice;
 
+    // 📦 Unit Conversions
+    if (req.body.unitDefs !== undefined) {
+      item.unitDefs = parseUnitDefs(req.body.unitDefs);
+    }
+
     // 📝 Other fields
     if (req.body.name) item.name = req.body.name;
     if (req.body.description) item.description = req.body.description;
@@ -547,6 +593,7 @@ exports.copyPrice = async (req, res) => {
       category: item.category,
       subcategory: item.subcategory,
       weight: item.weight,
+      unitDefs: item.unitDefs && Array.isArray(item.unitDefs) ? item.unitDefs.map((u) => ({ ...u })) : [],
       basePrice: item.basePrice,
       profitLoss: item.profitLoss,
       salePrice: item.salePrice,
@@ -685,11 +732,17 @@ if (r.subcategory && r.category) {
               image = r.image.trim();
             }
 
+            let unitDefs = [];
+            if (r.unitDefs) {
+              unitDefs = parseUnitDefs(r.unitDefs);
+            }
+
             await Price.create({
               name: r.name,
               category: categoryId,
               subcategory,
               weight,
+              unitDefs,
               basePrice: base,
               profitLoss: pl,
               salePrice: sale,
@@ -749,6 +802,9 @@ exports.exportPrices = async (req, res) => {
         gstPercent: p.gstPercent || 0,
         hsnCode: p.hsnCode || "",
         taxType: p.taxType || "cgst_sgst",
+
+        // 📦 UNIT CONVERSIONS
+        unitDefs: JSON.stringify(p.unitDefs || []),
 
         salePrice: p.salePrice,
         lockedPrice: p.lockedPrice,
@@ -831,6 +887,9 @@ exports.exportSelected = async (req, res) => {
         gstPercent: p.gstPercent || 0,
         hsnCode: p.hsnCode || "",
         taxType: p.taxType || "cgst_sgst",
+
+        // 📦 UNIT CONVERSIONS
+        unitDefs: JSON.stringify(p.unitDefs || []),
 
         salePrice: p.salePrice,
         lockedPrice: p.lockedPrice,
@@ -926,5 +985,52 @@ exports.getDiscountList = async (req, res) => {
     res.json(list);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+/* ======================================================
+      GET PRODUCT UNIT CONVERSIONS
+====================================================== */
+exports.getProductUnitConversions = async (req, res) => {
+  try {
+    const item = await Price.findById(req.params.id).select("name weight unitDefs");
+    if (!item) return res.status(404).json({ success: false, message: "Product not found" });
+
+    res.json({
+      success: true,
+      productId: item._id,
+      name: item.name,
+      weight: item.weight,
+      unitDefs: item.unitDefs || [],
+    });
+  } catch (err) {
+    console.error("❌ getProductUnitConversions error:", err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+/* ======================================================
+      UPDATE PRODUCT UNIT CONVERSIONS
+====================================================== */
+exports.updateProductUnitConversions = async (req, res) => {
+  try {
+    const item = await Price.findById(req.params.id);
+    if (!item) return res.status(404).json({ success: false, message: "Product not found" });
+
+    const rawDefs = req.body.unitDefs !== undefined ? req.body.unitDefs : req.body;
+    item.unitDefs = parseUnitDefs(rawDefs);
+
+    await item.save();
+
+    res.json({
+      success: true,
+      message: "Product unit conversions updated successfully",
+      productId: item._id,
+      name: item.name,
+      unitDefs: item.unitDefs,
+    });
+  } catch (err) {
+    console.error("❌ updateProductUnitConversions error:", err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
