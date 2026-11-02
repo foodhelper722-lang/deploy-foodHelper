@@ -17,6 +17,17 @@ const discountSchema = new mongoose.Schema({
   discountPercent: { type: Number, required: true },
 });
 
+/* ===== Unit Conversion Definition Schema ===== */
+const unitDefItemSchema = new mongoose.Schema(
+  {
+    key: { type: String, trim: true, lowercase: true },
+    label: { type: String, trim: true },
+    multiplier: { type: Number, default: 1, min: 1 },
+    isDefault: { type: Boolean, default: false },
+    order: { type: Number, default: 0 },
+  },
+  { _id: false }
+);
 
 const priceSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -63,6 +74,12 @@ const priceSchema = new mongoose.Schema({
 
   /* ========== Quantity Discounts ========== */
   discounts: [discountSchema],
+
+  /* ========== Unit Conversions ========== */
+  unitDefs: {
+    type: [unitDefItemSchema],
+    default: [],
+  },
 
   status: {
     type: String,

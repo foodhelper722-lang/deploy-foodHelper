@@ -140,6 +140,10 @@ router.put("/:id", upload.single("file"), priceController.updatePrice);
 // DELETE PRICE
 router.delete("/:id", priceController.deletePrice);
 
+// PRODUCT UNIT CONVERSIONS (GET & UPDATE)
+router.get("/:id/unit-conversions", priceController.getProductUnitConversions);
+router.put("/:id/unit-conversions", priceController.updateProductUnitConversions);
+
 router.post("/prices/set-gst", priceController.setGST);
 router.get("/prices/gst-list", priceController.getGSTList);
 

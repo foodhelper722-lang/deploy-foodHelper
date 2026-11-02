@@ -106,6 +106,8 @@ app.use(
 app.use("/api/banners", require("./routes/bannerRoutes"));
 app.use("/api/advertising-banner", require("./routes/advertisingBannerRoutes"));
 app.use("/api/service-areas", require("./routes/serviceAreaRoutes"));
+app.use("/api/unit-defs", require("./routes/unitDefRoutes"));
+app.use("/api/admin/unit-conversions", require("./routes/unitDefRoutes"));
 /* ================================
    HEALTH CHECK
 ================================ */
